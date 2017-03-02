@@ -1,4 +1,5 @@
-app.controller('DashCtrl', function($scope) {})
+app.controller('DashCtrl', function($scope) {
+});
 
 app.controller('ChatsCtrl', function($scope, Chats) {
   // With the new view caching in Ionic, Controllers are only called
@@ -13,11 +14,11 @@ app.controller('ChatsCtrl', function($scope, Chats) {
   $scope.remove = function(chat) {
     Chats.remove(chat);
   };
-})
+});
 
 app.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
   $scope.chat = Chats.get($stateParams.chatId);
-})
+});
 
 app.controller('AccountCtrl', function($scope) {
   $scope.settings = {

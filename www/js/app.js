@@ -22,18 +22,14 @@ app.run(function($ionicPlatform, fbCreds) {
 
     let fb = fbCreds;
     let authConfig = {
-      apiKey: fb.apiKey,
-      authDomain: fb.authDomain
+        apiKey: fb.apiKey,
+        authDomain: fb.authDomain
     };
     firebase.initializeApp(authConfig);
 })
 
 app.config(function($stateProvider, $urlRouterProvider) {
-
-    // Set up the various states which the app can be in.
-    // Each state's controller can be found in controllers.js
     $stateProvider
-
     // setup an abstract state for the tabs directive
         .state('tab', {
         url: '/tab',
@@ -47,7 +43,36 @@ app.config(function($stateProvider, $urlRouterProvider) {
         views: {
             'tab-dash': {
                 templateUrl: 'templates/tab-dash.html',
-                controller: 'DashCtrl'
+                controller: 'TripsCtrl'
+            }
+        }
+    })
+
+    .state('tab.cars', {
+            url: '/cars',
+            views: {
+                'tab-cars': {
+                    templateUrl: 'templates/tab-cars.html',
+                    controller: 'ListVehiclesCtrl'
+                }
+            }
+        })
+        .state('tab.car-detail', {
+            url: '/cars/:carId',
+            views: {
+                'tab-cars': {
+                    templateUrl: 'templates/car-detail.html',
+                    controller: 'NewVehicleCtrl'
+                }
+            }
+        })
+
+    .state('tab.hist', {
+        url: '/history',
+        views: {
+            'tab-hist': {
+                templateUrl: 'templates/tab-hist.html',
+                controller: 'HistCtrl'
             }
         }
     })
@@ -69,17 +94,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
                     controller: 'ChatDetailCtrl'
                 }
             }
-        })
-
-    .state('tab.account', {
-        url: '/account',
-        views: {
-            'tab-account': {
-                templateUrl: 'templates/tab-account.html',
-                controller: 'AccountCtrl'
-            }
-        }
-    });
+        });
 
     $urlRouterProvider.otherwise('/tab/dash');
 

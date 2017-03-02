@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('CurrentTripsCtrl', function($scope, Trips, Places){
+app.controller('TripsCtrl', function($scope, Trips){
 
 	Trips.getAllTrips()
 		.then((data) => {

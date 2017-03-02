@@ -1,6 +1,16 @@
-<ion-view view-title="roadtrippr">
+<ion-view view-title="Road Trippr">
     <ion-content class="padding">
-        <h2></h2>
-        <p></p>
+        <h2>Upcoming Trips!</h2>
+        <div ng-if="upcomingTrips">
+          <div class="card" ng-repeat="trip in upcomingTrips">
+            <div class="item item-text-wrap">
+              <a href="#/trips/{{trip.id}}">{{trip.name}}</a>
+            </div>
+          </div>
+        <div ng-if="!upcomingTrips">
+          <p>No upcoming trips.</p>
+        </div>
+
+        </div>
     </ion-content>
 </ion-view>
