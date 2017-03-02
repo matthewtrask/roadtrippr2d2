@@ -1,14 +1,18 @@
 <ion-view view-title="Road Trippr">
     <ion-content class="padding">
-        <h2>Upcoming Trips!</h2>
+        <div class="row">[Upcoming][Past] nested tabs here</div>
+
+
         <div ng-if="upcomingTrips">
           <div class="card" ng-repeat="trip in upcomingTrips">
             <div class="item item-text-wrap">
               <a href="#/trips/{{trip.id}}">{{trip.name}}</a>
             </div>
           </div>
+
         <div ng-if="!upcomingTrips">
           <p>No upcoming trips.</p>
+          <a href="">Add trip</a>
         </div>
 
         </div>
