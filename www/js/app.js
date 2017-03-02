@@ -48,6 +48,25 @@ app.config(function($stateProvider, $urlRouterProvider) {
         }
     })
 
+    .state('tab.chats', {
+            url: '/chats',
+            views: {
+                'tab-chats': {
+                    templateUrl: 'templates/tab-chats.html',
+                    controller: 'ChatsCtrl'
+                }
+            }
+        })
+        .state('tab.chat-detail', {
+            url: '/chats/:chatId',
+            views: {
+                'tab-chats': {
+                    templateUrl: 'templates/chat-detail.html',
+                    controller: 'ChatDetailCtrl'
+                }
+            }
+        })
+
     .state('tab.cars', {
             url: '/cars',
             views: {
@@ -67,34 +86,17 @@ app.config(function($stateProvider, $urlRouterProvider) {
             }
         })
 
-    .state('tab.hist', {
-        url: '/history',
+    .state('tab.account', {
+        url: '/profile',
         views: {
-            'tab-hist': {
-                templateUrl: 'templates/tab-hist.html',
-                controller: 'HistCtrl'
+            'tab-account': {
+                templateUrl: 'templates/tab-account.html',
+                controller: 'AccountCtrl'
             }
         }
-    })
+    });
 
-    .state('tab.chats', {
-            url: '/chats',
-            views: {
-                'tab-chats': {
-                    templateUrl: 'templates/tab-chats.html',
-                    controller: 'ChatsCtrl'
-                }
-            }
-        })
-        .state('tab.chat-detail', {
-            url: '/chats/:chatId',
-            views: {
-                'tab-chats': {
-                    templateUrl: 'templates/chat-detail.html',
-                    controller: 'ChatDetailCtrl'
-                }
-            }
-        });
+
 
     $urlRouterProvider.otherwise('/tab/dash');
 

@@ -21,7 +21,7 @@ app.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
 });
 
 app.controller('AccountCtrl', function($scope) {
-  $scope.settings = {
-    enableFriends: true
-  };
+  // $scope.settings = {
+  //   enableFriends: true
+  // };
 });
