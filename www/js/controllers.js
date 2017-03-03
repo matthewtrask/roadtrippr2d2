@@ -35,8 +35,7 @@ app.controller('NewTripCtrl', function($scope, Trips, Maps, $window) {
             state: 'RI'
         },
         depart: '',
-        arrive: '',
-        car: {}
+        arrive: ''
     };
 
     $scope.states = Maps.getStates();
@@ -83,7 +82,6 @@ app.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
 ///////////////////////
 
 app.controller('CarsCtrl', function($scope, Cars) {
-
     Cars.getSavedCars()
         .then((data) => {
             let cars = [];
