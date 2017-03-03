@@ -80,7 +80,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
             views: {
                 'tab-cars': {
                     templateUrl: 'templates/car-detail.html',
-                    controller: 'NewCarCtrl'
+                    controller: 'CarCtrl'
                 }
             }
         })

@@ -104,6 +104,16 @@ app.controller('CarsCtrl', function($scope, Cars) {
         });
 });
 
+app.controller('CarCtrl', function($scope, Cars, $stateParams){
+    $scope.carId = $stateParams.carId;
+
+    Cars.getCarData($scope.carId)
+        .then((data) => {
+            $scope.car = data;
+            console.log('$scope.car', $scope.car)
+        });
+});
+
 // app.controller('NewCarCtrl', function($scope) {
 
 // });

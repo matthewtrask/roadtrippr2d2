@@ -61,8 +61,7 @@ app.factory('Cars', function($http, $q, edCreds, fbCreds){
   let getCarData = function(car){
     return $http.get(`https://api.edmunds.com/api/vehicle/v2/honda/fit/2013/styles?fmt=json&api_key=edjp5y4b4ve2n3r6m9g2ny7k&view=full`)
       .then(function(response){
-        // console.log('success!', response.data.styles[0]['MPG']);
-        return response.data.styles[0]['MPG'];
+        return response.data.styles[0];
       }, function(response){
         console.log('error', response.data);
         return $q.reject(response.data);
