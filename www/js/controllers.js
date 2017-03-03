@@ -12,14 +12,6 @@ app.controller('DashCtrl', function($scope, Trips) {
             });
             $scope.upcomingTrips = trips;
         });
-
-    $scope.cancelTrip = ((trip) => {
-        Trips.deleteTrip(trip)
-            .then((data) => {
-                console.log('data', data);
-                $window.location.href = `#/trips/all`;
-            });
-    });
 });
 
 app.controller('TripCtrl', function($scope, Trips, $stateParams) {
@@ -28,7 +20,6 @@ app.controller('TripCtrl', function($scope, Trips, $stateParams) {
     Trips.getTrip($scope.tripId)
         .then((data) => {
             $scope.trip = data;
-            console.log('$scope.trip', $scope.trip);
         });
 });
 
