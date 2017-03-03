@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('NewVehicleCtrl', function($scope, Cars, Fuel, $window){
+app.controller('NewCarCtrl', function($scope, Cars, Fuel, $window){
 
     // Cars.getAllMakes()
     //  .then((response) => {
@@ -15,7 +15,6 @@ app.controller('NewVehicleCtrl', function($scope, Cars, Fuel, $window){
         gasType: '',
         mpg: 0
     };
-
 
     Fuel.getGasPrices()
         .then((response) => {
@@ -42,34 +41,34 @@ app.controller('NewVehicleCtrl', function($scope, Cars, Fuel, $window){
             $scope.gasPrices = gasPrices;
         });
 
-    $('select[name="selectMake"]').change(function(){
-       $scope.makes.forEach((make) => {
-            if(make.name === event.target.value){
-                $scope.models = make.models;
-            }
-       });
-    });
+    // $('select[name="selectMake"]').change(function(){
+    //    $scope.makes.forEach((make) => {
+    //         if(make.name === event.target.value){
+    //             $scope.models = make.models;
+    //         }
+    //    });
+    // });
 
-    $('select[name="selectModel"]').change(function(){
-       $scope.models.forEach((model) => {
-            if(model.name === event.target.value){
-                $scope.years = model.years;
-            }
-       });
-    });   
+    // $('select[name="selectModel"]').change(function(){
+    //    $scope.models.forEach((model) => {
+    //         if(model.name === event.target.value){
+    //             $scope.years = model.years;
+    //         }
+    //    });
+    // });
 
-    $('select[name="selectYear"]').change(function(){
+    // $('select[name="selectYear"]').change(function(){
        // Cars.getCarData($scope.selectedCar)
         // .then((response) => {
             // let cityMPG = parseInt(response.city);
             // let highwayMPG = parseInt(response.highway);
-            
+
             // DEV
             let cityMPG = 27;
             let highwayMPG = 33;
-            
+
             $scope.avgMPG = Math.round((cityMPG + highwayMPG) / 2)
-    });
+    // });
 
 
     $scope.saveCar = function(newCar){

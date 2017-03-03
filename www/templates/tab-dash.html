@@ -1,12 +1,10 @@
 <ion-view view-title="Road Trippr">
     <ion-content class="padding">
-        <div class="row">[Upcoming][Past] nested tabs here</div>
-
 
         <div ng-if="upcomingTrips">
           <div class="card" ng-repeat="trip in upcomingTrips">
             <div class="item item-text-wrap">
-              <a href="#/trips/{{trip.id}}">{{trip.name}}</a>
+              <a href="#/tab/dash/{{trip.id}}">{{trip.name}}</a>
             </div>
           </div>
 

@@ -1,6 +1,18 @@
-<ion-view view-title="Transportation">
-  <ion-content>
+<ion-view view-title="Rides">
+    <ion-content class="padding">
 
+        <div ng-if="savedCars">
+          <div class="card" ng-repeat="car in savedCars">
+            <div class="item item-text-wrap">
+              <a href="#/tab/cars/{{car.id}}">{{car.name}}</a>
+            </div>
+          </div>
 
-  </ion-content>
+        <div ng-if="!savedCars">
+          <p>No saved rides.</p>
+          <a href="">Add a ride</a>
+        </div>
+
+        </div>
+    </ion-content>
 </ion-view>

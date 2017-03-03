@@ -1,9 +1,4 @@
-// 'starter.services' is found in services.js
-// 'starter.controllers' is found in controllers.js
-// angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
-
 let app = angular.module('Trippr', ['ionic']);
-
 
 app.run(function($ionicPlatform, fbCreds) {
     $ionicPlatform.ready(function() {
@@ -19,7 +14,6 @@ app.run(function($ionicPlatform, fbCreds) {
             StatusBar.styleDefault();
         }
     });
-
     let fb = fbCreds;
     let authConfig = {
         apiKey: fb.apiKey,
@@ -31,23 +25,29 @@ app.run(function($ionicPlatform, fbCreds) {
 app.config(function($stateProvider, $urlRouterProvider) {
     $stateProvider
     // setup an abstract state for the tabs directive
-        .state('tab', {
+    .state('tab', {
         url: '/tab',
         abstract: true,
         templateUrl: 'templates/tabs.html'
     })
-
-
     .state('tab.dash', {
-        url: '/dash',
-        views: {
-            'tab-dash': {
-                templateUrl: 'templates/tab-dash.html',
-                controller: 'TripsCtrl'
+            url: '/dash',
+            views: {
+                'tab-dash': {
+                    templateUrl: 'templates/tab-dash.html',
+                    controller: 'DashCtrl'
+                }
             }
-        }
-    })
-
+        })
+        .state('tab.trip-detail', {
+          url: '/dash/:tripId',
+          views: {
+            'tab-dash': {
+                templateUrl: 'templates/trip-detail.html',
+                controller: 'TripCtrl'
+            }
+          }
+        })
     .state('tab.chats', {
             url: '/chats',
             views: {
@@ -66,13 +66,12 @@ app.config(function($stateProvider, $urlRouterProvider) {
                 }
             }
         })
-
     .state('tab.cars', {
             url: '/cars',
             views: {
                 'tab-cars': {
                     templateUrl: 'templates/tab-cars.html',
-                    controller: 'ListVehiclesCtrl'
+                    controller: 'CarsCtrl'
                 }
             }
         })
@@ -81,9 +80,18 @@ app.config(function($stateProvider, $urlRouterProvider) {
             views: {
                 'tab-cars': {
                     templateUrl: 'templates/car-detail.html',
-                    controller: 'NewVehicleCtrl'
+                    controller: 'NewCarCtrl'
                 }
             }
+        })
+        .state('tab.car-new', {
+          url: '/cars/new',
+          views: {
+            'tab-cars': {
+              templateUrl: 'templates/car-new.html',
+              controller: 'NewCarCtrl'
+            }
+          }
         })
 
     .state('tab.account', {

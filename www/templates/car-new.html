@@ -1,15 +1,14 @@
-
-<div class="list">
-
-  <label class="item item-input item-select">
-    <div class="input-label">
-      Lightsaber
-    </div>
-    <select>
-      <option>Blue</option>
-      <option selected>Green</option>
-      <option>Red</option>
-    </select>
-  </label>
-
-</div>
+<ion-view view-title="Add a ride">
+    <ion-content class="padding">
+        <div class="list">
+            <label class="item item-input item-select">
+                <div class="input-label">
+                    Make
+                </div>
+                <select ng-model="selectedCar.make" name="selectMake">
+                    <option ng-repeat="make in makes" class="make">{{make.name}}</option>
+                </select>
+            </label>
+        </div>
+    </ion-content>
+</ion-view>
