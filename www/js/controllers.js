@@ -1,4 +1,12 @@
 /////////////////////////
+//////// Header ////////
+///////////////////////
+
+app.controller('HeaderCtrl', function($scope) {
+
+});
+
+/////////////////////////
 ///// Dash / Trips /////
 ///////////////////////
 
@@ -42,11 +50,11 @@ app.controller('NewTripCtrl', function($scope, Trips, Maps, $window) {
 
     $scope.getDistance = ((newTrip) => {
         Maps.getDistance(newTrip)
-            .then(function(data){
+            .then(function(data) {
                 newTrip.distStr = data;
                 newTrip.distance = parseInt(data.replace(/,/g, ""));
                 Trips.createTrip(newTrip)
-                    .then(function(){
+                    .then(function() {
                         $window.location.href = `#/trips/all`;
                     })
             });
@@ -93,7 +101,7 @@ app.controller('CarsCtrl', function($scope, Cars) {
         });
 });
 
-app.controller('CarCtrl', function($scope, Cars, $stateParams){
+app.controller('CarCtrl', function($scope, Cars, $stateParams) {
     $scope.carId = $stateParams.carId;
 
     Cars.getCarData($scope.carId)

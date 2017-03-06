@@ -1,14 +1,14 @@
 <ion-view view-title="{{trip.name}}">
-<ion-header-bar align-title="left" class="bar-positive">
+<ion-header-bar align-title="left" class="bar-positive bar bar-header">
   <div class="buttons">
-    <button class="button" ng-click="doSomething()">Left Button</button>
+    <button class="button" >Left Button</button>
   </div>
-  <h1 class="title">{{trip.name}}</h1>
+  <h1 class="title">Title!</h1>
   <div class="buttons">
     <button class="button">Right Button</button>
   </div>
 </ion-header-bar>
-    <ion-content class="padding">
-        <ion-item>{{trip.distStr}}</ion-item>
-    </ion-content>
+<ion-content class="has-header">
+  Some content!
+</ion-content>
 </ion-view>
