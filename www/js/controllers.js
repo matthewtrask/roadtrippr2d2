@@ -30,6 +30,11 @@ app.controller('TripCtrl', function($scope, Trips, $stateParams) {
 
 app.controller('NewTripCtrl', function($scope, Trips, Maps, $window, $state, $ionicHistory) {
     console.log('NewTripCtrl');
+
+    $scope.goBack = function() {
+        $ionicHistory.goBack();
+    };
+
     $scope.newTrip = {
         name: '',
         start: {
@@ -43,17 +48,6 @@ app.controller('NewTripCtrl', function($scope, Trips, Maps, $window, $state, $io
         depart: '',
         arrive: ''
     };
-
-    $scope.goBack = function() {
-        $ionicHistory.goBack();
-    };
-
-    // $scope.movealong = function(){
-    //   $state.go('tab.trip-new2');
-    // };
-    // $scope.movealong2 = function(){
-    //   $state.go('tab.trip-new3');
-    // };
 
     $scope.states = Maps.getStates();
 
@@ -73,7 +67,7 @@ app.controller('NewTripCtrl', function($scope, Trips, Maps, $window, $state, $io
     $scope.minDate = new Date(2105, 6, 1);
     $scope.maxDate = new Date(2015, 6, 31);
 
-    $scope.datePickerCallback = function(val) {
+    $scope.selectDate = function(val) {
         if (!val) {
             console.log('Date not selected');
         } else {
