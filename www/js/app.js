@@ -25,7 +25,6 @@ app.run(function($ionicPlatform, fbCreds) {
 
 app.config(function($stateProvider, $urlRouterProvider) {
     $stateProvider
-    // setup an abstract state for the tabs directive
     .state('tab', {
         url: '/tab',
         abstract: true,
@@ -50,7 +49,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
           }
         })
         .state('tab.trip-new', {
-          url: '/dash/newtrip',
+          url: '/dash/new',
           views: {
             'tab-dash': {
                 templateUrl: 'templates/trip-new.html',
@@ -58,15 +57,15 @@ app.config(function($stateProvider, $urlRouterProvider) {
             }
           }
         })
-        // .state('tab.trip-new2', {
-        //   url: '/dash/newtrip2',
-        //   views: {
-        //     'tab-dash': {
-        //         templateUrl: 'templates/trip-new2.html',
-        //         controller: 'NewTripCtrl'
-        //     }
-        //   }
-        // })
+        .state('tab.trip-depart', {
+          url: '/dash/new/2',
+          views: {
+            'tab-dash': {
+                templateUrl: 'templates/trip-depart.html',
+                controller: 'NewTripCtrl'
+            }
+          }
+        })
     .state('tab.chats', {
             url: '/chats',
             views: {

@@ -10,13 +10,13 @@
     <ion-content class="padding has-header">
 
 <small>Departure</small>
-
-
-<small>Arrival</small>
-
+<label class="item item-input">
+  <span class="input-label">Date</span>
+  <input type="date" ng-model="newTrip.date">
+</label>
 
 <div class="buttons">
-<button class="button" ng-click="movealong2()">Continue > </button>
+<button class="button" ng-click="selectDate(newTrip)">Continue > </button>
 </div>
     </ion-content>
 </ion-view>

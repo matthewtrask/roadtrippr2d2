@@ -35,6 +35,8 @@ app.controller('NewTripCtrl', function($scope, Trips, Maps, $window, $state, $io
         $ionicHistory.goBack();
     };
 
+    $scope.states = Maps.getStates();
+
     $scope.newTrip = {
         name: '',
         start: {
@@ -49,8 +51,6 @@ app.controller('NewTripCtrl', function($scope, Trips, Maps, $window, $state, $io
         arrive: ''
     };
 
-    $scope.states = Maps.getStates();
-
     $scope.getDistance = ((newTrip) => {
         Maps.getDistance(newTrip)
             .then(function(data) {
@@ -63,17 +63,9 @@ app.controller('NewTripCtrl', function($scope, Trips, Maps, $window, $state, $io
             });
     });
 
-    $scope.currentDate = new Date();
-    $scope.minDate = new Date(2105, 6, 1);
-    $scope.maxDate = new Date(2015, 6, 31);
-
-    $scope.selectDate = function(val) {
-        if (!val) {
-            console.log('Date not selected');
-        } else {
-            console.log('Selected date is : ', val);
-        }
-    };
+    $scope.selectDate = ((newTrip) => {
+        console.log('newTrip', newTrip);
+    });
 });
 
 /////////////////////////
