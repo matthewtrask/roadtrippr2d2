@@ -1,16 +1,9 @@
 /////////////////////////
-//////// Header ////////
-///////////////////////
-
-app.controller('HeaderCtrl', function($scope) {
-
-});
-
-/////////////////////////
 ///// Dash / Trips /////
 ///////////////////////
 
-app.controller('DashCtrl', function($scope, Trips) {
+app.controller('DashCtrl', function($scope, Trips, $state) {
+    console.log('DashCtrl');
     Trips.getAllTrips()
         .then((data) => {
             let trips = [];
@@ -20,9 +13,13 @@ app.controller('DashCtrl', function($scope, Trips) {
             });
             $scope.upcomingTrips = trips;
         });
+    $scope.newTripForm = function() {
+        $state.go('tab.trip-new');
+    };
 });
 
 app.controller('TripCtrl', function($scope, Trips, $stateParams) {
+    console.log('TripCtrl');
     $scope.tripId = $stateParams.tripId;
 
     Trips.getTrip($scope.tripId)
@@ -31,20 +28,32 @@ app.controller('TripCtrl', function($scope, Trips, $stateParams) {
         });
 });
 
-app.controller('NewTripCtrl', function($scope, Trips, Maps, $window) {
+app.controller('NewTripCtrl', function($scope, Trips, Maps, $window, $state, $ionicHistory) {
+    console.log('NewTripCtrl');
     $scope.newTrip = {
-        name: 'East Coast Road Trip',
+        name: '',
         start: {
             city: 'Nashville',
             state: 'TN'
         },
         end: {
-            city: 'Providence',
-            state: 'RI'
+            city: '',
+            state: ''
         },
         depart: '',
         arrive: ''
     };
+
+    $scope.goBack = function() {
+        $ionicHistory.goBack();
+    };
+
+    // $scope.movealong = function(){
+    //   $state.go('tab.trip-new2');
+    // };
+    // $scope.movealong2 = function(){
+    //   $state.go('tab.trip-new3');
+    // };
 
     $scope.states = Maps.getStates();
 
@@ -59,13 +68,26 @@ app.controller('NewTripCtrl', function($scope, Trips, Maps, $window) {
                     })
             });
     });
+
+    $scope.currentDate = new Date();
+    $scope.minDate = new Date(2105, 6, 1);
+    $scope.maxDate = new Date(2015, 6, 31);
+
+    $scope.datePickerCallback = function(val) {
+        if (!val) {
+            console.log('Date not selected');
+        } else {
+            console.log('Selected date is : ', val);
+        }
+    };
 });
 
 /////////////////////////
-////// Companions //////
+///////// Chat /////////
 ///////////////////////
 
 app.controller('ChatsCtrl', function($scope, Chats) {
+    console.log('ChatsCtrl');
 
     // With the new view caching in Ionic, Controllers are only called
     // when they are recreated or on app start, instead of every page change.
@@ -82,6 +104,7 @@ app.controller('ChatsCtrl', function($scope, Chats) {
 });
 
 app.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
+    console.log('ChatDetailCtrl');
     $scope.chat = Chats.get($stateParams.chatId);
 });
 
@@ -90,6 +113,7 @@ app.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
 ///////////////////////
 
 app.controller('CarsCtrl', function($scope, Cars) {
+    console.log('CarsCtrl');
     Cars.getSavedCars()
         .then((data) => {
             let cars = [];
@@ -102,6 +126,7 @@ app.controller('CarsCtrl', function($scope, Cars) {
 });
 
 app.controller('CarCtrl', function($scope, Cars, $stateParams) {
+    console.log('CarCtrl');
     $scope.carId = $stateParams.carId;
 
     Cars.getCarData($scope.carId)
@@ -111,9 +136,9 @@ app.controller('CarCtrl', function($scope, Cars, $stateParams) {
         });
 });
 
-// app.controller('NewCarCtrl', function($scope) {
-
-// });
+app.controller('NewCarCtrl', function($scope) {
+    console.log('NewCarCtrl');
+});
 
 /////////////////////////
 /////// Profile ////////

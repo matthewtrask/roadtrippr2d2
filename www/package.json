@@ -10,5 +10,8 @@
   "license": "ISC",
   "devDependencies": {
     "firebase": "^3.7.0"
+  },
+  "dependencies": {
+    "datepicker-for-ionic": "^1.1.7"
   }
 }

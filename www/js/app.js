@@ -1,4 +1,4 @@
-let app = angular.module('Trippr', ['ionic']);
+let app = angular.module('Trippr', ['ionic', 'ionic-datepicker']);
 
 app.run(function($ionicPlatform, fbCreds) {
     $ionicPlatform.ready(function() {
@@ -14,6 +14,7 @@ app.run(function($ionicPlatform, fbCreds) {
             StatusBar.styleDefault();
         }
     });
+    // Firebase for Chats
     let fb = fbCreds;
     let authConfig = {
         apiKey: fb.apiKey,
@@ -48,6 +49,24 @@ app.config(function($stateProvider, $urlRouterProvider) {
             }
           }
         })
+        .state('tab.trip-new', {
+          url: '/dash/newtrip',
+          views: {
+            'tab-dash': {
+                templateUrl: 'templates/trip-new.html',
+                controller: 'NewTripCtrl'
+            }
+          }
+        })
+        // .state('tab.trip-new2', {
+        //   url: '/dash/newtrip2',
+        //   views: {
+        //     'tab-dash': {
+        //         templateUrl: 'templates/trip-new2.html',
+        //         controller: 'NewTripCtrl'
+        //     }
+        //   }
+        // })
     .state('tab.chats', {
             url: '/chats',
             views: {

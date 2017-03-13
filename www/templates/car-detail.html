@@ -1,5 +1,15 @@
 <ion-view view-title="{{car.year.year}} {{car.make.name}} {{car.model.name}}">
-    <ion-content class="padding">
+
+<ion-header-bar align-title="center" class="bar-light bar bar-header">
+  <div class="buttons">
+    <button class="button" ng-click=""><</button>
+  </div>
+
+  <h1 class="title">{{car.year.year}} {{car.make.name}} {{car.model.name}}</h1>
+
+</ion-header-bar>
+
+    <ion-content class="padding has-header">
 
     </ion-content>
 </ion-view>

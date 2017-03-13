@@ -1,5 +1,15 @@
 <ion-view view-title="Rides">
-    <ion-content class="padding">
+
+<ion-header-bar align-title="center" class="bar-light bar bar-header" ng-click="newRide()">
+
+  <h1 class="title">Rides</h1>
+
+  <div class="buttons">
+    <button class="button" ng-click="newCar()">+</button>
+  </div>
+</ion-header-bar>
+
+    <ion-content class="padding has-header">
 
         <div ng-if="savedCars">
           <div class="card" ng-repeat="car in savedCars">
