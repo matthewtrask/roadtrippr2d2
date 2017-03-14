@@ -32,17 +32,17 @@
                 <div class="input-label">
                     Year
                 </div>
-                <select ng-model="selectedCar.year" name="selectYear" ng-change="">
+                <select ng-model="selectedCar.year" name="selectYear" ng-change="yearSelected(selectedCar)">
                     <option ng-repeat="year in years" class="year" value="{{year.year}}">{{year.year}}</option>
                 </select>
             </label>
         </div>
 
-<ion-list>
+<ion-list ng-model="selectedCar.fuel">
   <ion-radio ng-repeat="fuelType in fuelTypes" ng-model="selectedCar.fuel" ng-value="'{{fuelType.strType}}'"><small>{{fuelType.strType}}</small></ion-radio>
 </ion-list>
 
-<button>Save</button>
+<button class="button" ng-click="save(selectedCar)">Save</button>
 
     </ion-content>
 </ion-view>

@@ -181,26 +181,15 @@ app.controller('NewCarCtrl', function($scope, Fuel, Cars){
       });
     };
 
-
-
-    // };
-
-    // $scope.$watch("selectedCar.make", function(){
-    //     console.log('change detected');
-    //     $scope.makes.forEach((make) => {
-    //         if(make.name === $scope.selectedCar.make){
-    //             $scope.models = make.models;
-    //             console.log('$scope.models', $scope.models);
-    //         }
-    //     });
-    // });
-
     // DEV
     let cityMPG = 27;
     let highwayMPG = 33;
 
     $scope.avgMPG = Math.round((cityMPG + highwayMPG) / 2);
 
+    $scope.save = function(selectedCar){
+      console.log('selectedCar', selectedCar);
+    };
 
 });
 
