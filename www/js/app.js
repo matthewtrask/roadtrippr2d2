@@ -39,15 +39,6 @@ app.config(function($stateProvider, $urlRouterProvider) {
                 }
             }
         })
-        .state('tab.trip-detail', {
-          url: '/dash/:tripId',
-          views: {
-            'tab-dash': {
-                templateUrl: 'templates/trip-detail.html',
-                controller: 'TripCtrl'
-            }
-          }
-        })
         .state('tab.trip-new', {
           url: '/dash/new',
           views: {
@@ -57,32 +48,14 @@ app.config(function($stateProvider, $urlRouterProvider) {
             }
           }
         })
-        .state('tab.trip-depart', {
-          url: '/dash/new/2',
+        .state('tab.trip-detail', {
+          url: '/dash/:tripId',
           views: {
             'tab-dash': {
-                templateUrl: 'templates/trip-depart.html',
-                controller: 'NewTripCtrl'
+                templateUrl: 'templates/trip-detail.html',
+                controller: 'TripCtrl'
             }
           }
-        })
-    .state('tab.chats', {
-            url: '/chats',
-            views: {
-                'tab-chats': {
-                    templateUrl: 'templates/tab-chats.html',
-                    controller: 'ChatsCtrl'
-                }
-            }
-        })
-        .state('tab.chat-detail', {
-            url: '/chats/:chatId',
-            views: {
-                'tab-chats': {
-                    templateUrl: 'templates/chat-detail.html',
-                    controller: 'ChatDetailCtrl'
-                }
-            }
         })
     .state('tab.cars', {
             url: '/cars',
@@ -110,6 +83,24 @@ app.config(function($stateProvider, $urlRouterProvider) {
               controller: 'NewCarCtrl'
             }
           }
+        })
+    .state('tab.chats', {
+            url: '/chats',
+            views: {
+                'tab-chats': {
+                    templateUrl: 'templates/tab-chats.html',
+                    controller: 'ChatsCtrl'
+                }
+            }
+        })
+        .state('tab.chat-detail', {
+            url: '/chats/:chatId',
+            views: {
+                'tab-chats': {
+                    templateUrl: 'templates/chat-detail.html',
+                    controller: 'ChatDetailCtrl'
+                }
+            }
         })
 
     .state('tab.account', {

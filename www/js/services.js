@@ -1,3 +1,62 @@
+app.factory('Cars', function($http, $q, fbCreds){
+
+  let getAllMakes = function(){
+    console.log('Cars.getAllMakes');
+    // return $http.get(`https://api.edmunds.com/api/vehicle/v2/makes?fmt=json&api_key=${edCreds.apiKey}`)
+    return $http.get('/js/dev.json')
+      .then(function(response){
+        // console.log('success', response.data);
+        return response.data['makes'];
+      }, function(response){
+        console.log('error', response.data);
+        return $q.reject(response.data);
+      });
+  };
+
+  // let getCarData = function(car){
+  //   return $http.get(`https://api.edmunds.com/api/vehicle/v2/honda/fit/2013/styles?fmt=json&api_key=edjp5y4b4ve2n3r6m9g2ny7k&view=full`)
+  //     .then(function(response){
+  //       return response.data.styles[0];
+  //     }, function(response){
+  //       console.log('error', response.data);
+  //       return $q.reject(response.data);
+  //     });
+  // };
+
+  let saveCar = function(car){
+    return $http.post(`${fbCreds.databaseURL}/cars.json`, angular.toJson(car))
+      .then(function(response){
+        console.log('success', response.data);
+        return response.data;
+        // getAllTrips(obj);
+        }, function(response){
+        console.log('error', response.data);
+        return $q.reject(response.data);
+      });
+
+  };
+
+  let getSavedCars = function(){
+    return $http.get(`${fbCreds.databaseURL}/cars.json`)
+      .then(function(response){
+        console.log('success', response.data);
+        return response.data;
+      }, function(response){
+        console.log('error', response.data);
+        return $q.reject(response.data);
+      });
+  };
+
+  return {
+    getAllMakes,
+    // getCarData,
+    saveCar,
+    getSavedCars
+  };
+
+});
+
+
 app.factory('Chats', function() {
   // Some fake testing data
   var chats = [{
@@ -43,62 +102,6 @@ app.factory('Chats', function() {
       return null;
     }
   };
-});
-
-app.factory('Cars', function($http, $q, edCreds, fbCreds){
-
-  let getAllMakes = function(){
-    return $http.get(`https://api.edmunds.com/api/vehicle/v2/makes?fmt=json&api_key=${edCreds.apiKey}`)
-      .then(function(response){
-        // console.log('success', response.data);
-        return response.data['makes'];
-      }, function(response){
-        console.log('error', response.data);
-        return $q.reject(response.data);
-      });
-  };
-
-  let getCarData = function(car){
-    return $http.get(`https://api.edmunds.com/api/vehicle/v2/honda/fit/2013/styles?fmt=json&api_key=edjp5y4b4ve2n3r6m9g2ny7k&view=full`)
-      .then(function(response){
-        return response.data.styles[0];
-      }, function(response){
-        console.log('error', response.data);
-        return $q.reject(response.data);
-      });
-  };
-
-  let saveCar = function(car){
-    return $http.post(`${fbCreds.databaseURL}/cars.json`, angular.toJson(car))
-      .then(function(response){
-        console.log('success', response.data);
-        return response.data;
-        // getAllTrips(obj);
-        }, function(response){
-        console.log('error', response.data);
-        return $q.reject(response.data);
-      });
-
-  };
-
-  let getSavedCars = function(){
-    return $http.get(`${fbCreds.databaseURL}/cars.json`)
-      .then(function(response){
-        console.log('success', response.data);
-        return response.data;
-      }, function(response){
-        console.log('error', response.data);
-        return $q.reject(response.data);
-      });
-  };
-
-  return {
-    getAllMakes,
-    getCarData,
-    saveCar,
-    getSavedCars
-  };
-
 });
 
 app.factory('Fuel', function($http, $q){

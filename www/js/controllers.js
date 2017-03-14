@@ -28,11 +28,19 @@ app.controller('TripCtrl', function($scope, Trips, $stateParams) {
         });
 });
 
-app.controller('NewTripCtrl', function($scope, Trips, Maps, $window, $state, $ionicHistory) {
+app.controller('NewTripCtrl', function($scope, Trips, Maps, $window, $state, $ionicHistory, $ionicTabsDelegate) {
     console.log('NewTripCtrl');
 
     $scope.goBack = function() {
         $ionicHistory.goBack();
+    };
+
+    $scope.continue = function(){
+        console.log('clicked continue');
+        console.log('newTrip', $scope.newTrip);
+        // let viewIndex = ($ionicHistory.currentView().index)
+        // let nextView = $ionicTabsDelegate.select(viewIndex+1)
+        // $state.go(nextView);
     };
 
     $scope.states = Maps.getStates();
@@ -40,18 +48,33 @@ app.controller('NewTripCtrl', function($scope, Trips, Maps, $window, $state, $io
     $scope.newTrip = {
         name: '',
         start: {
-            city: 'Nashville',
-            state: 'TN'
+            city: '',
+            state: ''
         },
         end: {
             city: '',
             state: ''
         },
         depart: '',
-        arrive: ''
+        carId: '',
+        plannerId: ''
     };
 
-    $scope.getDistance = ((newTrip) => {
+    $scope.newCarForm = function(){
+        console.log('newCarForm');
+        $state.go('tab.car-new');
+    };
+
+});
+
+/////////////////////////
+//////// Drives ////////
+///////////////////////
+
+app.controller('DriveCtrl', function($scope){
+   console.log('DriveCtrl');
+
+   $scope.getDistance = ((newTrip) => {
         Maps.getDistance(newTrip)
             .then(function(data) {
                 newTrip.distStr = data;
@@ -62,11 +85,8 @@ app.controller('NewTripCtrl', function($scope, Trips, Maps, $window, $state, $io
                     })
             });
     });
-
-    $scope.selectDate = ((newTrip) => {
-        console.log('newTrip', newTrip);
-    });
 });
+
 
 /////////////////////////
 ///////// Chat /////////
@@ -100,31 +120,101 @@ app.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
 
 app.controller('CarsCtrl', function($scope, Cars) {
     console.log('CarsCtrl');
-    Cars.getSavedCars()
-        .then((data) => {
-            let cars = [];
-            Object.keys(data).forEach((key) => {
-                data[key].id = key;
-                cars.push(data[key]);
+
+});
+
+app.controller('NewCarCtrl', function($scope, Fuel, Cars){
+   console.log('NewCarCtrl');
+
+   $scope.selectedCar = {
+       make: '',
+       model: '',
+       year: '',
+       fuel: '',
+       mpg: 0
+   };
+
+    Fuel.getGasPrices()
+        .then((response) => {
+            let fuelTypes = [];
+            Object.keys(response).forEach((type) => {
+                let fuelType = {}
+                fuelType.price = parseFloat(response[type]);
+                fuelType.strPrice = response[type];
+                fuelType.strType = type.toUpperCase();
+                if(fuelType.strType == 'PREMIUM'){
+                    fuelTypes.push(fuelType);
+                }
+                if(fuelType.strType == 'MIDGRADE'){
+                    fuelTypes.push(fuelType);
+                }
+                if(fuelType.strType == 'REGULAR'){
+                    fuelTypes.push(fuelType);
+                }
+                if(fuelType.strType == 'DIESEL'){
+                    fuelTypes.push(fuelType);
+                }
             });
-            $scope.savedCars = cars;
+            $scope.fuelTypes = fuelTypes;
         });
+
+    Cars.getAllMakes()
+        .then((response)=>{
+            $scope.makes = response;
+        });
+
+    $scope.makeSelected = function(selectedCar){
+      // Filter car models by selected make
+      $scope.makes.forEach((make) => {
+        if(make.name == selectedCar.make){
+          $scope.models = make.models;
+        }
+      });
+    };
+
+    $scope.modelSelected = function(selectedCar){
+      // Filter car years by selected model
+      $scope.models.forEach((model) => {
+        if(model.name == selectedCar.model){
+          $scope.years = model.years;
+        }
+      });
+    };
+
+
+
+    // };
+
+    // $scope.$watch("selectedCar.make", function(){
+    //     console.log('change detected');
+    //     $scope.makes.forEach((make) => {
+    //         if(make.name === $scope.selectedCar.make){
+    //             $scope.models = make.models;
+    //             console.log('$scope.models', $scope.models);
+    //         }
+    //     });
+    // });
+
+    // DEV
+    let cityMPG = 27;
+    let highwayMPG = 33;
+
+    $scope.avgMPG = Math.round((cityMPG + highwayMPG) / 2);
+
+
 });
 
 app.controller('CarCtrl', function($scope, Cars, $stateParams) {
     console.log('CarCtrl');
-    $scope.carId = $stateParams.carId;
+//     $scope.carId = $stateParams.carId;
 
-    Cars.getCarData($scope.carId)
-        .then((data) => {
-            $scope.car = data;
-            console.log('$scope.car', $scope.car)
-        });
+//     Cars.getCarData($scope.carId)
+//         .then((data) => {
+//             $scope.car = data;
+//             console.log('$scope.car', $scope.car)
+//         });
 });
 
-app.controller('NewCarCtrl', function($scope) {
-    console.log('NewCarCtrl');
-});
 
 /////////////////////////
 /////// Profile ////////

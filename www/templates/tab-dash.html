@@ -1,27 +1,20 @@
 <ion-view view-title="Road Trippr">
-
-<ion-header-bar align-title="center" class="bar-light bar bar-header">
-  <h1 class="title">Upcoming trips</h1>
-
-  <div class="buttons">
-    <button class="button" ng-click="newTripForm()">+</button>
-  </div>
-</ion-header-bar>
-
+    <ion-header-bar align-title="center" class="bar-light bar bar-header">
+        <h1 class="title">Upcoming trips</h1>
+        <div class="buttons">
+            <button class="button" ng-click="newTripForm()">+</button>
+        </div>
+    </ion-header-bar>
     <ion-content class="padding has-header">
-
         <div ng-if="upcomingTrips">
-          <div class="card" ng-repeat="trip in upcomingTrips">
-            <div class="item item-text-wrap">
-              <a href="#/tab/dash/{{trip.id}}">{{trip.name}}</a>
-            </div>
-          </div>
-
+            <ion-list>
+                <ion-item ng-repeat="trip in upcomingTrips"><a href="#/tab/dash/{{trip.id}}">{{trip.name}}</a></ion-item>
+            </ion-list>
+        </div>
         <div ng-if="!upcomingTrips">
-          <p>No upcoming trips.</p>
-          <a href="" ng-click="newTripForm()">Add trip</a>
+            <p>No upcoming trips.</p>
+            <a href="" ng-click="newTripForm()">Add trip</a>
         </div>
         </div>
-
     </ion-content>
 </ion-view>
