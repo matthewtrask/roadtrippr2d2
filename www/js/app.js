@@ -14,6 +14,7 @@ app.run(function($ionicPlatform, fbCreds) {
             StatusBar.styleDefault();
         }
     });
+
     // Firebase for Chats
     let fb = fbCreds;
     let authConfig = {
@@ -21,10 +22,24 @@ app.run(function($ionicPlatform, fbCreds) {
         authDomain: fb.authDomain
     };
     firebase.initializeApp(authConfig);
-})
+});
 
-app.config(function($stateProvider, $urlRouterProvider) {
+app.config(function($httpProvider, $stateProvider, $urlRouterProvider) {
+
+$httpProvider.defaults.xsrfCookieName = 'csrftoken';
+$httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+
     $stateProvider
+    .state('login', {
+        url: '/login',
+        templateUrl: 'templates/login.html',
+        controller: 'AuthCtrl'
+    })
+    .state('register', {
+        url: '/register',
+        templateUrl: 'templates/register.html',
+        controller: 'AuthCtrl'
+    })
     .state('tab', {
         url: '/tab',
         abstract: true,

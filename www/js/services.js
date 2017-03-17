@@ -1,7 +1,65 @@
+app.factory('Auth', function($http, $q) {
+
+    let createUser = function(data) {
+        return $http({
+            url: "http://localhost:8000/register_user/",
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            data: {
+                "username": data.username,
+                "password": data.password,
+                "email": data.email,
+                "first_name": data.first_name,
+                "last_name": data.last_name
+            }
+        }).then(function(response) {
+            console.log('Factory.createUser response', response);
+            return response;
+        }, function(response) {
+            console.log('Factory.createUser response', response);
+            return $q.reject(response);
+        });
+    };
+
+    let loginUser = function(username, password) {
+        console.log('Auth.loginUser');
+        return $http({
+            url: "http://localhost:8000/login/",
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            data: {
+                "username": username,
+                "password": password
+            }
+        }).then(function(response) {
+            console.log('Factory.createUser response', response);
+            return response;
+        }, function(response) {
+            console.log('Factory.createUser response', response);
+            return $q.reject(response);
+        });
+    };
+
+    let logoutUser = function() {
+        console.log('Auth.logoutUser');
+    };
+
+    return {
+        createUser,
+        loginUser,
+        logoutUser
+    };
+
+});
+
+
 app.factory('Cars', function($http, $q, fbCreds){
 
   let getAllMakes = function(){
-    console.log('Cars.getAllMakes');
     // return $http.get(`https://api.edmunds.com/api/vehicle/v2/makes?fmt=json&api_key=${edCreds.apiKey}`)
     return $http.get('/js/dev.json')
       .then(function(response){
@@ -13,15 +71,16 @@ app.factory('Cars', function($http, $q, fbCreds){
       });
   };
 
-  // let getCarData = function(car){
-  //   return $http.get(`https://api.edmunds.com/api/vehicle/v2/honda/fit/2013/styles?fmt=json&api_key=edjp5y4b4ve2n3r6m9g2ny7k&view=full`)
-  //     .then(function(response){
-  //       return response.data.styles[0];
-  //     }, function(response){
-  //       console.log('error', response.data);
-  //       return $q.reject(response.data);
-  //     });
-  // };
+  let getCarData = function(make, model, year){
+    //return $http.get(`https://api.edmunds.com/api/vehicle/v2/${make}/${model}/${year}/styles?fmt=json&api_key=${edCreds.apiKey}`)
+    return $http.get(`/js/dev2.json`)
+      .then(function(response){
+        return response.data.styles[0];
+      }, function(response){
+        console.log('error', response.data);
+        return $q.reject(response.data);
+      });
+  };
 
   let saveCar = function(car){
     return $http.post(`${fbCreds.databaseURL}/cars.json`, angular.toJson(car))
@@ -49,7 +108,7 @@ app.factory('Cars', function($http, $q, fbCreds){
 
   return {
     getAllMakes,
-    // getCarData,
+    getCarData,
     saveCar,
     getSavedCars
   };

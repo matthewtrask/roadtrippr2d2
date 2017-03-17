@@ -1,4 +1,31 @@
 /////////////////////////
+///// User Auth ////////
+///////////////////////
+
+app.controller('AuthCtrl', function($scope, Auth, $ionicPopup, $state) {
+
+    $scope.data = {};
+
+    $scope.register = function() {
+        console.log('$scope.data', $scope.data);
+        Auth.createUser($scope.data)
+            .then((data) => {
+                    console.log('AuthCtrl.register', data);
+                    $state.go('tab.dash');
+                });
+    };
+
+    $scope.login = function() {
+        console.log('$scope.data', $scope.data);
+        Auth.loginUser($scope.data.username, $scope.data.password)
+            .then((data) => {
+                console.log('AuthCtrl.login', data);
+                $state.go('tab.dash');
+            });
+    };
+});
+
+/////////////////////////
 ///// Dash / Trips /////
 ///////////////////////
 
@@ -25,6 +52,7 @@ app.controller('TripCtrl', function($scope, Trips, $stateParams) {
     Trips.getTrip($scope.tripId)
         .then((data) => {
             $scope.trip = data;
+            console.log('$scope.trip', $scope.trip);
         });
 });
 
@@ -35,7 +63,7 @@ app.controller('NewTripCtrl', function($scope, Trips, Maps, $window, $state, $io
         $ionicHistory.goBack();
     };
 
-    $scope.continue = function(){
+    $scope.continue = function() {
         console.log('clicked continue');
         console.log('newTrip', $scope.newTrip);
         // let viewIndex = ($ionicHistory.currentView().index)
@@ -60,7 +88,7 @@ app.controller('NewTripCtrl', function($scope, Trips, Maps, $window, $state, $io
         plannerId: ''
     };
 
-    $scope.newCarForm = function(){
+    $scope.newCarForm = function() {
         console.log('newCarForm');
         $state.go('tab.car-new');
     };
@@ -71,10 +99,10 @@ app.controller('NewTripCtrl', function($scope, Trips, Maps, $window, $state, $io
 //////// Drives ////////
 ///////////////////////
 
-app.controller('DriveCtrl', function($scope){
-   console.log('DriveCtrl');
+app.controller('DriveCtrl', function($scope) {
+    console.log('DriveCtrl');
 
-   $scope.getDistance = ((newTrip) => {
+    $scope.getDistance = ((newTrip) => {
         Maps.getDistance(newTrip)
             .then(function(data) {
                 newTrip.distStr = data;
@@ -123,16 +151,22 @@ app.controller('CarsCtrl', function($scope, Cars) {
 
 });
 
-app.controller('NewCarCtrl', function($scope, Fuel, Cars){
-   console.log('NewCarCtrl');
+app.controller('NewCarCtrl', function($scope, Fuel, Cars) {
+    console.log('NewCarCtrl');
 
-   $scope.selectedCar = {
-       make: '',
-       model: '',
-       year: '',
-       fuel: '',
-       mpg: 0
-   };
+    $scope.selectedCar = {
+        nickname: '',
+        make: '',
+        model: '',
+        year: '',
+        fuel: '',
+        mpg: 0
+    };
+
+    Cars.getAllMakes()
+        .then((response) => {
+            $scope.makes = response;
+        });
 
     Fuel.getGasPrices()
         .then((response) => {
@@ -142,66 +176,64 @@ app.controller('NewCarCtrl', function($scope, Fuel, Cars){
                 fuelType.price = parseFloat(response[type]);
                 fuelType.strPrice = response[type];
                 fuelType.strType = type.toUpperCase();
-                if(fuelType.strType == 'PREMIUM'){
+                if (fuelType.strType == 'PREMIUM') {
                     fuelTypes.push(fuelType);
                 }
-                if(fuelType.strType == 'MIDGRADE'){
+                if (fuelType.strType == 'MIDGRADE') {
                     fuelTypes.push(fuelType);
                 }
-                if(fuelType.strType == 'REGULAR'){
+                if (fuelType.strType == 'REGULAR') {
                     fuelTypes.push(fuelType);
                 }
-                if(fuelType.strType == 'DIESEL'){
+                if (fuelType.strType == 'DIESEL') {
                     fuelTypes.push(fuelType);
                 }
             });
             $scope.fuelTypes = fuelTypes;
         });
 
-    Cars.getAllMakes()
-        .then((response)=>{
-            $scope.makes = response;
+    $scope.makeSelected = function(selectedCar) {
+        // Filter car models by selected make
+        $scope.makes.forEach((make) => {
+            if (make.name == selectedCar.make) {
+                $scope.models = make.models;
+            }
         });
-
-    $scope.makeSelected = function(selectedCar){
-      // Filter car models by selected make
-      $scope.makes.forEach((make) => {
-        if(make.name == selectedCar.make){
-          $scope.models = make.models;
-        }
-      });
     };
 
-    $scope.modelSelected = function(selectedCar){
-      // Filter car years by selected model
-      $scope.models.forEach((model) => {
-        if(model.name == selectedCar.model){
-          $scope.years = model.years;
-        }
-      });
+    $scope.modelSelected = function(selectedCar) {
+        // Filter car years by selected model
+        $scope.models.forEach((model) => {
+            if (model.name == selectedCar.model) {
+                $scope.years = model.years;
+            }
+        });
     };
 
-    // DEV
-    let cityMPG = 27;
-    let highwayMPG = 33;
+    $scope.getMPG = function(selectedCar){
+      Cars.getCarData(selectedCar.make, selectedCar.model, selectedCar.year)
+        .then((response) => {
+          selectedCar.mpg = Math.round((parseInt(response.MPG.city) + parseInt(response.MPG.highway)) / 2);
+          $scope.saveCar(selectedCar);
+        });
+    };
 
-    $scope.avgMPG = Math.round((cityMPG + highwayMPG) / 2);
-
-    $scope.save = function(selectedCar){
+    $scope.saveCar = function(selectedCar) {
       console.log('selectedCar', selectedCar);
+        // Cars.saveCar(selectedCar);
     };
 
 });
 
 app.controller('CarCtrl', function($scope, Cars, $stateParams) {
     console.log('CarCtrl');
-//     $scope.carId = $stateParams.carId;
+    //     $scope.carId = $stateParams.carId;
 
-//     Cars.getCarData($scope.carId)
-//         .then((data) => {
-//             $scope.car = data;
-//             console.log('$scope.car', $scope.car)
-//         });
+    //     Cars.getCarData($scope.carId)
+    //         .then((data) => {
+    //             $scope.car = data;
+    //             console.log('$scope.car', $scope.car)
+    //         });
 });
 
 
