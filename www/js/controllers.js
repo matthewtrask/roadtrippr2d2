@@ -1,4 +1,25 @@
 /////////////////////////
+///////// App //////////
+///////////////////////
+
+app.controller('AppCtrl', function($scope, $ionicSideMenuDelegate, Auth) {
+
+    $scope.showMenu = function() {
+        $ionicSideMenuDelegate.toggleLeft();
+    };
+
+    $scope.showRightMenu = function() {
+        $ionicSideMenuDelegate.toggleRight();
+    };
+
+    $scope.logout = function() {
+        Auth.logoutUser();
+        console.log('Logged out user?');
+    };
+
+});
+
+/////////////////////////
 ///// User Auth ////////
 ///////////////////////
 
@@ -7,22 +28,32 @@ app.controller('AuthCtrl', function($scope, Auth, $ionicPopup, $state) {
     $scope.data = {};
 
     $scope.register = function() {
-        console.log('$scope.data', $scope.data);
         Auth.createUser($scope.data)
             .then((data) => {
-                    console.log('AuthCtrl.register', data);
-                    $state.go('tab.dash');
-                });
-    };
-
-    $scope.login = function() {
-        console.log('$scope.data', $scope.data);
-        Auth.loginUser($scope.data.username, $scope.data.password)
-            .then((data) => {
-                console.log('AuthCtrl.login', data);
                 $state.go('tab.dash');
             });
     };
+
+    $scope.login = function() {
+        Auth.loginUser($scope.data.username, $scope.data.password)
+            .then((data) => {
+                $state.go('tab.dash');
+            });
+    };
+
+});
+
+/////////////////////////
+//////// Places ////////
+///////////////////////
+
+app.controller('PlacesCtrl', function($scope, Places) {
+    console.log('PlacesCtrl');
+    $scope.getPlaces = Places.getAllPlaces()
+        .then((response) => {
+            $scope.places = response;
+        });
+
 });
 
 /////////////////////////
@@ -210,16 +241,16 @@ app.controller('NewCarCtrl', function($scope, Fuel, Cars) {
         });
     };
 
-    $scope.getMPG = function(selectedCar){
-      Cars.getCarData(selectedCar.make, selectedCar.model, selectedCar.year)
-        .then((response) => {
-          selectedCar.mpg = Math.round((parseInt(response.MPG.city) + parseInt(response.MPG.highway)) / 2);
-          $scope.saveCar(selectedCar);
-        });
+    $scope.getMPG = function(selectedCar) {
+        Cars.getCarData(selectedCar.make, selectedCar.model, selectedCar.year)
+            .then((response) => {
+                selectedCar.mpg = Math.round((parseInt(response.MPG.city) + parseInt(response.MPG.highway)) / 2);
+                $scope.saveCar(selectedCar);
+            });
     };
 
     $scope.saveCar = function(selectedCar) {
-      console.log('selectedCar', selectedCar);
+        console.log('selectedCar', selectedCar);
         // Cars.saveCar(selectedCar);
     };
 

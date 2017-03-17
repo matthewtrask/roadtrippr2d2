@@ -26,26 +26,61 @@ app.run(function($ionicPlatform, fbCreds) {
 
 app.config(function($httpProvider, $stateProvider, $urlRouterProvider) {
 
-$httpProvider.defaults.xsrfCookieName = 'csrftoken';
-$httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+    $httpProvider.defaults.xsrfCookieName = 'csrftoken';
+    $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 
     $stateProvider
-    .state('login', {
-        url: '/login',
-        templateUrl: 'templates/login.html',
-        controller: 'AuthCtrl'
-    })
-    .state('register', {
-        url: '/register',
-        templateUrl: 'templates/register.html',
-        controller: 'AuthCtrl'
-    })
+        .state('login', {
+            url: '/login',
+            templateUrl: 'templates/login.html',
+            controller: 'AuthCtrl'
+        })
+        .state('register', {
+            url: '/register',
+            templateUrl: 'templates/register.html',
+            controller: 'AuthCtrl'
+        })
+
+        // .state('app', {
+        //     url: '/',
+        //     abstract: true,
+        //     templateUrl: 'templates/menu.html',
+        //     controller: 'AppCtrl'
+        // })
+        // .state('app.account', {
+        //     url: "/profile",
+        //     views: {
+        //         'menuContent': {
+        //             templateUrl: "templates/account.html",
+        //             controller: 'AccountCtrl'
+        //         }
+        //     }
+        // })
+        // .state('app.settings', {
+        //     url: "/settings",
+        //     views: {
+        //         'menuContent': {
+        //             templateUrl: "templates/settings.html",
+        //             controller: 'AccountCtrl'
+        //         }
+        //     }
+        // })
+
     .state('tab', {
-        url: '/tab',
-        abstract: true,
-        templateUrl: 'templates/tabs.html'
-    })
-    .state('tab.dash', {
+            url: '/tab',
+            abstract: true,
+            templateUrl: 'templates/tabs.html'
+        })
+        .state('tab.places', {
+            url: '/places',
+            views: {
+                'tab-places': {
+                    templateUrl: 'templates/tab-places.html',
+                    controller: 'PlacesCtrl'
+                }
+            }
+        })
+        .state('tab.dash', {
             url: '/dash',
             views: {
                 'tab-dash': {
@@ -55,24 +90,24 @@ $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
             }
         })
         .state('tab.trip-new', {
-          url: '/dash/new',
-          views: {
-            'tab-dash': {
-                templateUrl: 'templates/trip-new.html',
-                controller: 'NewTripCtrl'
+            url: '/dash/new',
+            views: {
+                'tab-dash': {
+                    templateUrl: 'templates/trip-new.html',
+                    controller: 'NewTripCtrl'
+                }
             }
-          }
         })
         .state('tab.trip-detail', {
-          url: '/dash/:tripId',
-          views: {
-            'tab-dash': {
-                templateUrl: 'templates/trip-detail.html',
-                controller: 'TripCtrl'
+            url: '/dash/:tripId',
+            views: {
+                'tab-dash': {
+                    templateUrl: 'templates/trip-detail.html',
+                    controller: 'TripCtrl'
+                }
             }
-          }
         })
-    .state('tab.cars', {
+        .state('tab.cars', {
             url: '/cars',
             views: {
                 'tab-cars': {
@@ -91,15 +126,15 @@ $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
             }
         })
         .state('tab.car-new', {
-          url: '/cars/new',
-          views: {
-            'tab-cars': {
-              templateUrl: 'templates/car-new.html',
-              controller: 'NewCarCtrl'
+            url: '/cars/new',
+            views: {
+                'tab-cars': {
+                    templateUrl: 'templates/car-new.html',
+                    controller: 'NewCarCtrl'
+                }
             }
-          }
         })
-    .state('tab.chats', {
+        .state('tab.chats', {
             url: '/chats',
             views: {
                 'tab-chats': {
@@ -118,18 +153,6 @@ $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
             }
         })
 
-    .state('tab.account', {
-        url: '/profile',
-        views: {
-            'tab-account': {
-                templateUrl: 'templates/tab-account.html',
-                controller: 'AccountCtrl'
-            }
-        }
-    });
-
-
-
-    $urlRouterProvider.otherwise('/tab/dash');
+$urlRouterProvider.otherwise('/tab/dash');
 
 });
