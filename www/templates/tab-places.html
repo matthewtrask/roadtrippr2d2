@@ -1,13 +1,13 @@
 <ion-view view-title="Places">
     <ion-header-bar align-title="center" class="bar-light bar bar-header">
         <h1 class="title">Places</h1>
-        <div class="buttons">
-            <button class="button" ng-click="">+</button>
-        </div>
     </ion-header-bar>
     <ion-content class="padding has-header">
         <ion-list>
             <ion-item ng-repeat="place in places"><a href="">{{place.name}}</a></ion-item>
         </ion-list>
+        <button class="button button-positive" ng-click="newTripForm()">
+          Start a new trip
+        </button>
     </ion-content>
 </ion-view>

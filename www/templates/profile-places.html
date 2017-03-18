@@ -1,0 +1,15 @@
+<ion-view view-title="Profile">
+    <ion-header-bar align-title="center" class="bar-light bar bar-header">
+        <h1 class="title">Profile</h1>
+    </ion-header-bar>
+    <ion-content class="padding has-header">
+        <div class="button-bar">
+            <a class="button button-small" ng-click="myTrips()">Trips</a>
+            <a class="button button-small" ng-click="myCars()">Cars</a>
+            <a class="button button-small button-positive">Saved</a>
+        </div>
+        <ion-list>
+            <ion-item ng-repeat="trip in uTrips"><a href="#/tab/dash/{{trip.id}}">{{trip.name}}</a></ion-item>
+        </ion-list>
+    </ion-content>
+</ion-view>

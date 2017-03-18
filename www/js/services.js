@@ -1,57 +1,34 @@
-app.factory('Auth', function($http, $q) {
+app.factory('Root', function($http, apiUrl, $q) {
+    let secure_token = null;
 
-    let createUser = function(data) {
+    let getApiRoot = function() {
         return $http({
-            url: "http://localhost:8000/register_user/",
-            method: "POST",
+            url: apiUrl,
             headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            data: {
-                "username": data.username,
-                "password": data.password,
-                "email": data.email,
-                "first_name": data.first_name,
-                "last_name": data.last_name
+                'Authorization': "Token " + secure_token
             }
         }).then(function(response) {
-            return response;
+            console.log('getApiRoot', response);
+            return response.data;
         }, function(response) {
             console.log('error', response);
             return $q.reject(response);
         });
     };
 
-    let loginUser = function(username, password) {
-        console.log('Auth.loginUser');
-        return $http({
-            url: "http://localhost:8000/login/",
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            data: {
-                "username": username,
-                "password": password
-            }
-        }).then(function(response) {
-            return response;
-        }, function(response) {
-            console.log('error', response);
-            return $q.reject(response);
-        });
+    let setToken = function(token) {
+        secure_token = token;
     };
 
-    let logoutUser = function() {
-        console.log('Auth.logoutUser');
+    let getToken = function() {
+        return secure_token;
     };
 
     return {
-        createUser,
-        loginUser,
-        logoutUser
+        getApiRoot,
+        getToken,
+        setToken
     };
-
 });
 
 app.factory('Cars', function($http, $q, fbCreds) {
@@ -81,7 +58,7 @@ app.factory('Cars', function($http, $q, fbCreds) {
 
     let saveCar = function(car) {
         return $http({
-            url: "http://localhost:8000/register_user/",
+            // url: "http://localhost:8000/cars",
             method: "POST",
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
@@ -119,9 +96,8 @@ app.factory('Cars', function($http, $q, fbCreds) {
         getAllMakes,
         getCarData,
         // saveCar,
-        getSavedCars
+        // getSavedCars
     };
-
 });
 
 app.factory('Chats', function() {
@@ -187,7 +163,6 @@ app.factory('Fuel', function($http, $q) {
     return {
         getGasPrices
     }
-
 });
 
 app.factory('Maps', function($http, $q, distCreds) {
@@ -390,7 +365,6 @@ app.factory('Maps', function($http, $q, distCreds) {
         getStates,
         getDistance
     };
-
 });
 
 app.factory('Trips', function($http, fbCreds, $q) {
@@ -449,7 +423,6 @@ app.factory('Trips', function($http, fbCreds, $q) {
         deleteTrip
 
     };
-
 });
 
 app.factory('Places', function($http) {
@@ -457,7 +430,6 @@ app.factory('Places', function($http) {
     let getAllPlaces = function() {
         return $http({
             url: "http://localhost:8000/attractions/",
-            method: "GET",
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
             }
@@ -469,7 +441,7 @@ app.factory('Places', function($http) {
         });
     };
 
-  return {
-      getAllPlaces
-  };
+    return {
+        getAllPlaces
+    };
 });

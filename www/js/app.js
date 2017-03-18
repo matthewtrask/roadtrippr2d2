@@ -1,4 +1,6 @@
-let app = angular.module('Trippr', ['ionic', 'ionic-datepicker']);
+let app = angular.module('Trippr', ['ionic']);
+
+app.constant('apiUrl', "http://localhost:8000");
 
 app.run(function($ionicPlatform, fbCreds) {
     $ionicPlatform.ready(function() {
@@ -30,47 +32,25 @@ app.config(function($httpProvider, $stateProvider, $urlRouterProvider) {
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 
     $stateProvider
-        .state('login', {
-            url: '/login',
-            templateUrl: 'templates/login.html',
-            controller: 'AuthCtrl'
-        })
+
         .state('register', {
             url: '/register',
             templateUrl: 'templates/register.html',
             controller: 'AuthCtrl'
         })
-
-        // .state('app', {
-        //     url: '/',
-        //     abstract: true,
-        //     templateUrl: 'templates/menu.html',
-        //     controller: 'AppCtrl'
-        // })
-        // .state('app.account', {
-        //     url: "/profile",
-        //     views: {
-        //         'menuContent': {
-        //             templateUrl: "templates/account.html",
-        //             controller: 'AccountCtrl'
-        //         }
-        //     }
-        // })
-        // .state('app.settings', {
-        //     url: "/settings",
-        //     views: {
-        //         'menuContent': {
-        //             templateUrl: "templates/settings.html",
-        //             controller: 'AccountCtrl'
-        //         }
-        //     }
-        // })
+        .state('login', {
+            url: '/login',
+            templateUrl: 'templates/login.html',
+            controller: 'AuthCtrl'
+        })
 
     .state('tab', {
             url: '/tab',
             abstract: true,
             templateUrl: 'templates/tabs.html'
         })
+
+// PLACES
         .state('tab.places', {
             url: '/places',
             views: {
@@ -80,79 +60,75 @@ app.config(function($httpProvider, $stateProvider, $urlRouterProvider) {
                 }
             }
         })
-        .state('tab.dash', {
-            url: '/dash',
+
+// MAP (CURRENT TRIP)
+        .state('tab.map', {
+            url: '/map',
             views: {
-                'tab-dash': {
-                    templateUrl: 'templates/tab-dash.html',
-                    controller: 'DashCtrl'
-                }
+              'tab-map': {
+                templateUrl: 'templates/tab-map.html',
+                controller: 'AppCtrl'
+              }
             }
         })
-        .state('tab.trip-new', {
-            url: '/dash/new',
+
+// GUIDES
+        .state('tab.guides', {
+            url: '/guides',
             views: {
-                'tab-dash': {
-                    templateUrl: 'templates/trip-new.html',
-                    controller: 'NewTripCtrl'
-                }
-            }
-        })
-        .state('tab.trip-detail', {
-            url: '/dash/:tripId',
-            views: {
-                'tab-dash': {
-                    templateUrl: 'templates/trip-detail.html',
-                    controller: 'TripCtrl'
-                }
-            }
-        })
-        .state('tab.cars', {
-            url: '/cars',
-            views: {
-                'tab-cars': {
-                    templateUrl: 'templates/tab-cars.html',
-                    controller: 'CarsCtrl'
-                }
-            }
-        })
-        .state('tab.car-detail', {
-            url: '/cars/:carId',
-            views: {
-                'tab-cars': {
-                    templateUrl: 'templates/car-detail.html',
-                    controller: 'CarCtrl'
-                }
-            }
-        })
-        .state('tab.car-new', {
-            url: '/cars/new',
-            views: {
-                'tab-cars': {
-                    templateUrl: 'templates/car-new.html',
-                    controller: 'NewCarCtrl'
-                }
-            }
-        })
-        .state('tab.chats', {
-            url: '/chats',
-            views: {
-                'tab-chats': {
-                    templateUrl: 'templates/tab-chats.html',
-                    controller: 'ChatsCtrl'
-                }
-            }
-        })
-        .state('tab.chat-detail', {
-            url: '/chats/:chatId',
-            views: {
-                'tab-chats': {
-                    templateUrl: 'templates/chat-detail.html',
-                    controller: 'ChatDetailCtrl'
+                'tab-guides': {
+                    templateUrl: 'templates/tab-guides.html',
+                    controller: 'GuidesCtrl'
                 }
             }
         })
 
-$urlRouterProvider.otherwise('/tab/dash');
+// PROFILE
+        .state('tab.profile', {
+          url: '/profile',
+          views: {
+            'tab-profile': {
+              templateUrl: 'templates/tab-profile.html',
+              controller: 'ProfileCtrl'
+            }
+          }
+        })
+        .state('tab.profile-trips', {
+            url: '/profile/trips',
+            views: {
+                'tab-profile': {
+                    templateUrl: 'templates/profile-trips.html',
+                    controller: 'ProfileCtrl'
+                }
+            }
+        })
+        .state('tab.profile-cars', {
+            url: '/profile/cars',
+            views: {
+                'tab-profile': {
+                    templateUrl: 'templates/profile-cars.html',
+                    controller: 'ProfileCtrl'
+                }
+            }
+        })
+        .state('tab.profile-carsnew', {
+          views: {
+            'tab-profile': {
+              templateUrl: 'templates/profile-carsnew.html',
+              controller: 'NewCarCtrl'
+            }
+          }
+        })
+        .state('tab.profile-places', {
+            url: '/profile/places',
+            views: {
+                'tab-profile': {
+                    templateUrl: 'templates/profile-places.html',
+                    controller: 'ProfileCtrl'
+                }
+            }
+        })
+
+    $urlRouterProvider.otherwise('/tab/places');
 
 });

@@ -1,4 +1,4 @@
-<ion-view view-title="Add a ride">
+<ion-view view-title="Add a car">
     <ion-header-bar align-title="center" class="bar-light bar bar-header">
         <div class="buttons">
             <button class="button" ng-click="">
@@ -9,14 +9,14 @@
     <ion-content class="padding has-header">
         <small>Nickname</small>
         <label class="item item-input">
-            <input type="text" placeholder="e.g. Tardis, Batmobile" ng-model="selectedCar.nickname">
+            <input type="text" placeholder="e.g. Tardis, Batmobile" ng-model="carNew.nickname">
         </label>
         <div class="list">
             <label class="item item-input item-select">
                 <div class="input-label">
                     Make
                 </div>
-                <select ng-model="selectedCar.make" ng-change="makeSelected(selectedCar)">
+                <select ng-model="carNew.make" ng-change="makeSelected(carNew)">
                     <option ng-repeat="make in makes" class="make" value="{{make.name}}">
                         {{make.name}}
                     </option>
@@ -26,7 +26,7 @@
                 <div class="input-label">
                     Make
                 </div>
-                <select ng-model="selectedCar.model" name="selectModel" ng-change="modelSelected(selectedCar)">
+                <select ng-model="carNew.model" name="selectModel" ng-change="modelSelected(carNew)">
                     <option ng-repeat="model in models" class="model" value="{{model.name}}">
                         {{model.name}}
                     </option>
@@ -36,15 +36,15 @@
                 <div class="input-label">
                     Year
                 </div>
-                <select ng-model="selectedCar.year" name="selectYear" ng-change="yearSelected(selectedCar)">
+                <select ng-model="carNew.year" name="selectYear" ng-change="yearSelected(carNew)">
                     <option ng-repeat="year in years" class="year" value="{{year.year}}">{{year.year}}</option>
                 </select>
             </label>
         </div>
         <small>Fuel type</small>
-        <ion-list ng-model="selectedCar.fuel">
-            <ion-radio ng-repeat="fuelType in fuelTypes" ng-model="selectedCar.fuel" ng-value="'{{fuelType.strType}}'"><small>{{fuelType.strType}}</small></ion-radio>
+        <ion-list ng-model="carNew.fuel">
+            <ion-radio ng-repeat="fuelType in fuelTypes" ng-model="carNew.fuel" ng-value="'{{fuelType.strType}}'"><small>{{fuelType.strType}}</small></ion-radio>
         </ion-list>
-        <button class="button" ng-click="getMPG(selectedCar)">Save</button>
+        <button class="button" ng-click="getMPG(carNew)">Save</button>
     </ion-content>
 </ion-view>

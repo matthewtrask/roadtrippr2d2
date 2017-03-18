@@ -1,17 +1,24 @@
 <ion-tabs class="tabs-icon-top tabs-color-active-positive">
 
-  <!-- Dashboard Tab -->
-  <ion-tab title="Trips"
-    icon-off="ion-map" icon-on="ion-map"
+  <!-- Places Tab (HOME) -->
+  <ion-tab title="Explore"
+    icon-off="ion-planet" icon-on="ion-planet"
     href="#/tab">
-    <ion-nav-view name="tab-dash"></ion-nav-view>
+    <ion-nav-view name="tab-places"></ion-nav-view>
   </ion-tab>
 
-  <!-- Places Tab -->
-  <ion-tab title="Explore"
-    icon-off="ion-ios-chatboxes-outline" icon-on="ion-ios-chatboxes"
-    href="#/tab/places">
-    <ion-nav-view name="tab-places"></ion-nav-view>
+  <!-- Map Tab -->
+  <ion-tab title="Map"
+    icon-off="ion-map" icon-on="ion-map"
+    href="#/tab/map">
+    <ion-nav-view name="tab-map"></ion-nav-view>
+  </ion-tab>
+
+  <!-- Guides Tab -->
+  <ion-tab title="Guides"
+    icon-off="ion-ios-albums-outline" icon-on="ion-ios-albums-outline"
+    href="#/tab/guides">
+    <ion-nav-view name="tab-guides"></ion-nav-view>
   </ion-tab>
 
   <!-- Chats Tab -->
@@ -21,18 +28,11 @@
     <ion-nav-view name="tab-chats"></ion-nav-view>
   </ion-tab>
 
-  <!-- Cars Tab -->
-  <ion-tab title="Rides"
-    icon-off="ion-model-s" icon-on="ion-model-s"
-    href="#/tab/cars">
-    <ion-nav-view name="tab-cars"></ion-nav-view>
-  </ion-tab>
-
-  <!-- Settings Tab -->
-  <ion-tab title="Settings"
-    icon-off="ion-ios-gear-outline" icon-on="ion-ios-gear-outline"
+  <!-- Profile Tab -->
+  <ion-tab title="Profile"
+    icon-off="ion-ios-person-outline" icon-on="ion-ios-person-outline"
     href="#/tab/profile">
-    <ion-nav-view name="tab-account"></ion-nav-view>
+    <ion-nav-view name="tab-profile"></ion-nav-view>
   </ion-tab>
 
 </ion-tabs>

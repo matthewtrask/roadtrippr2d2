@@ -11,10 +11,6 @@
                 <ion-item ng-repeat="trip in upcomingTrips"><a href="#/tab/dash/{{trip.id}}">{{trip.name}}</a></ion-item>
             </ion-list>
         </div>
-        <div ng-if="!upcomingTrips">
-            <p>No upcoming trips.</p>
-            <a href="" ng-click="newTripForm()">Add trip</a>
-        </div>
         </div>
     </ion-content>
 </ion-view>

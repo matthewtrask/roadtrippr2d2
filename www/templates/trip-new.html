@@ -21,11 +21,10 @@
                 &nbsp;
             </div>
             <select ng-model="newTrip.start.state">
-                <option selected disabled>State</option>
                 <option ng-repeat="state in states">{{state.name}}</option>
             </select>
         </label>
-        <small>End Destination</small>
+        <small>Destination</small>
         <label class="item item-input">
             <span class="input-label">City</span>
             <input type="text">
@@ -35,7 +34,6 @@
                 &nbsp;
             </div>
             <select ng-model="newTrip.end.state">
-                <option selected disabled>State</option>
                 <option ng-repeat="state in states">{{state.name}}</option>
             </select>
         </label>
@@ -57,8 +55,11 @@
             </label>
         </div>
         <a href="" ng-click="newCarForm()">Or add a new car</a>
-        <div class="buttons">
-            <button class="button" ng-click="continue(newTrip)">Continue > </button>
-        </div>
     </ion-content>
+    <ion-footer-bar align-title="left" class="">
+
+      <button class="button button-block button-positive">
+        START TRIP
+      </button>
+    </ion-footer-bar>
 </ion-view>
