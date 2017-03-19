@@ -104,6 +104,8 @@ app.controller('GuidesCtrl', function($scope) {
 
 app.controller('ProfileCtrl', function($scope, $state, Root, Trips, Fuel) {
 
+
+
     $scope.myTrips = function() {
         console.log('clicked myTrips');
         $state.go('tab.profile');
@@ -132,7 +134,7 @@ app.controller('NewCarCtrl', function($scope, Fuel, Cars, Root) {
         model: '',
         year: '',
         fuel: '',
-        mpg:
+        mpg: 0
     };
 
     Cars.getAllMakes()
@@ -204,26 +206,11 @@ app.controller('NewCarCtrl', function($scope, Fuel, Cars, Root) {
                 //     console.log('response', response);
                 // });
             });
-     };
 
+    };
 });
 
 ////// Trips //////
-
-app.controller('TripsCtrl', function($scope, Trips, $state) {
-    console.log('TripsCtrl')
-});
-
-app.controller('TripCtrl', function($scope, Trips, $stateParams) {
-    console.log('TripCtrl');
-    $scope.tripId = $stateParams.tripId;
-
-    Trips.getTrip($scope.tripId)
-        .then((data) => {
-            $scope.trip = data;
-            console.log('$scope.trip', $scope.trip);
-        });
-});
 
 app.controller('NewTripCtrl', function($scope, Trips, Maps, $window, $state, $ionicHistory, $ionicTabsDelegate) {
     console.log('NewTripCtrl');

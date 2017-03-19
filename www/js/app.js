@@ -102,6 +102,14 @@ app.config(function($httpProvider, $stateProvider, $urlRouterProvider) {
                 }
             }
         })
+        .state('tab.profile-tripsnew', {
+          views: {
+            'tab-profile': {
+              templateUrl: 'templates/profile-tripsnew.html',
+              controller: 'NewTripCtrl'
+            }
+          }
+        })
         .state('tab.profile-cars', {
             url: '/profile/cars',
             views: {
