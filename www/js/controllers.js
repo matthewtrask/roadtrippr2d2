@@ -1,5 +1,5 @@
 /////////////////////////
-///////// App //////////
+////// App / Nav ///////
 ///////////////////////
 
 app.controller('AppCtrl', function($scope, $state, $ionicSideMenuDelegate) {
@@ -19,17 +19,16 @@ app.controller('AppCtrl', function($scope, $state, $ionicSideMenuDelegate) {
     };
 
     $scope.newTripForm = function() {
-        $state.go('trip-new');
+        $state.go('tab.profile-tripsnew');
     };
 
     $scope.newCarForm = function() {
-        console.log('newCarForm');
         $state.go('tab.profile-carsnew');
     };
 });
 
 /////////////////////////
-///////// Auth /////////
+////// User Auth ///////
 ///////////////////////
 
 app.controller('AuthCtrl', function($scope, Root, $state, $http) {
@@ -104,8 +103,6 @@ app.controller('GuidesCtrl', function($scope) {
 
 app.controller('ProfileCtrl', function($scope, $state, Root, Trips, Fuel) {
 
-
-
     $scope.myTrips = function() {
         console.log('clicked myTrips');
         $state.go('tab.profile');
@@ -127,21 +124,12 @@ app.controller('ProfileCtrl', function($scope, $state, Root, Trips, Fuel) {
 
 ////// Cars //////
 
-app.controller('NewCarCtrl', function($scope, Fuel, Cars, Root) {
-    $scope.newCar = {
-        nickname: '',
-        make: '',
-        model: '',
-        year: '',
-        fuel: '',
-        mpg: 0
-    };
-
+app.controller('NewCarCtrl', function($scope, Fuel, Cars, Root, $http) {
+    // Populate form options
     Cars.getAllMakes()
         .then((response) => {
             $scope.makes = response;
         });
-
     Fuel.getGasPrices()
         .then((response) => {
             let fuelTypes = [];
@@ -166,6 +154,17 @@ app.controller('NewCarCtrl', function($scope, Fuel, Cars, Root) {
             $scope.fuelTypes = fuelTypes;
         });
 
+    $scope.newCar = {
+        nickname: '',
+        make: '',
+        model: '',
+        year: '',
+        fuel_grade: '',
+        mpg: 0,
+        owner: ''
+    };
+
+    // Build newCar object from user input
     $scope.makeSelected = function(newCar) {
         $scope.makes.forEach((make) => {
             if (make.name == newCar.make) {
@@ -173,7 +172,6 @@ app.controller('NewCarCtrl', function($scope, Fuel, Cars, Root) {
             }
         });
     };
-
     $scope.modelSelected = function(newCar) {
         $scope.models.forEach((model) => {
             if (model.name == newCar.model) {
@@ -181,38 +179,49 @@ app.controller('NewCarCtrl', function($scope, Fuel, Cars, Root) {
             }
         });
     };
-
-    $scope.getMPG = function(newCar) {
+    $scope.setMPG = function(newCar) {
+      // Called from user click [Save]
         Cars.getCarData(newCar.make, newCar.model, newCar.year)
             .then((response) => {
                 newCar.mpg = Math.round((parseInt(response.MPG.city) + parseInt(response.MPG.highway)) / 2);
-                $scope.saveCar(newCar);
+                $scope.setOwner(newCar);
             });
     };
 
-    $scope.saveCar = function(newCar) {
-        console.log('newCar', newCar);
-        Root.getApiRoot()
-            .then((root) => {
-                console.log('root', root);
-                // $http({
-                //     url: `${root}/cars.json`,
-                //     method: 'POST',
-                //     headers: {
-                //         'Authorization': 'Token ' + Root.getToken()
-                //     }
-                // })
-                // .then((response) => {
-                //     console.log('response', response);
-                // });
-            });
-
+// >>>>>>>>>>>
+    $scope.setOwner = function(newCar){
+      newCar.owner = Root.getToken();
+      console.log('newCar', newCar);
+      // $scope.car = newCar;
+      // $scope.createCar();
     };
+
+    $scope.createCar = function(){
+
+      Root.getApiRoot()
+          .then((root) => {
+              $http({
+                  url: `${root.cars}`, // method
+                  method: 'POST',
+                  headers: {
+                      'Authorization': 'Token ' + Root.getToken()
+                  },
+                  data: {
+                    "nickname": $scope.car.nickname,
+                    "owner": $scope.car.owner,
+                    "fuel_grade": $scope.car.fuel_grade,
+                    "mpg": $scope.car.mpg
+                  }
+              }).then((response) => {
+                  console.log('response', response);
+              });
+          });
+    }
 });
 
 ////// Trips //////
 
-app.controller('NewTripCtrl', function($scope, Trips, Maps, $window, $state, $ionicHistory, $ionicTabsDelegate) {
+app.controller('NewTripCtrl', function($scope, Trips, Maps, $state, $ionicHistory, $ionicTabsDelegate) {
     console.log('NewTripCtrl');
 
     $scope.states = Maps.getStates();
@@ -246,8 +255,8 @@ app.controller('DriveCtrl', function($scope) {
                 newTrip.distStr = data;
                 newTrip.distance = parseInt(data.replace(/,/g, ""));
                 Trips.createTrip(newTrip)
-                    .then(function() {
-                        $window.location.href = `#/trips/all`;
+                    .then(function(response) {
+                      console.log('response', response);
                     })
             });
     });

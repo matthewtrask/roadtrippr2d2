@@ -31,6 +31,7 @@ app.factory('Root', function($http, apiUrl, $q) {
     };
 });
 
+// DEV
 app.factory('Cars', function($http, $q, fbCreds) {
 
     let getAllMakes = function() {
@@ -58,17 +59,15 @@ app.factory('Cars', function($http, $q, fbCreds) {
 
     let saveCar = function(car) {
         return $http({
-            // url: "http://localhost:8000/cars",
+            url: "http://localhost:8000/cars",
             method: "POST",
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
             },
             data: {
-                "username": data.username,
-                "password": data.password,
-                "email": data.email,
-                "first_name": data.first_name,
-                "last_name": data.last_name
+                "nickname": data.nickname,
+                "fuel_grade": data.fuel_grade,
+                "mpg": data.mpg
             }
         }).then(function(response) {
             console.log('success', response.data);
@@ -99,6 +98,86 @@ app.factory('Cars', function($http, $q, fbCreds) {
         // getSavedCars
     };
 });
+
+app.factory('Trips', function($http, fbCreds, $q) {
+
+    let createTrip = function(newTrip) {
+        console.log('createTrip(newTrip)', newTrip);
+        return $http.post(`${fbCreds.databaseURL}/trips.json`, angular.toJson(newTrip))
+            .then(function(response) {
+                console.log('success', response.data);
+                return response.data;
+            }, function(response) {
+                console.log('error', response.data);
+                return $q.reject(response.data);
+            });
+    };
+
+    let getAllTrips = function() {
+        return $http.get(`${fbCreds.databaseURL}/trips.json`)
+            .then(function(response) {
+                console.log('success', response.data);
+                return response.data;
+            }, function(response) {
+                console.log('error', response.data);
+                return $q.reject(response.data);
+            });
+    };
+
+    let getTrip = function(tripId) {
+        return $http.get(`${fbCreds.databaseURL}/trips/${tripId}.json`)
+            .then(function(response) {
+                console.log('success', response.data);
+                return response.data;
+            }, function(response) {
+                console.log('error', response.data);
+                return $q.reject(response.data);
+            });
+    };
+
+    let deleteTrip = function(trip) {
+        console.log('trip', trip);
+        return $http.delete(`${fbCreds.databaseURL}/trips/${trip}.json`)
+            .then(function(response) {
+                console.log('success', response.data);
+                getAllTrips();
+                return response.data;
+            }, function(response) {
+                console.log('error', response.data);
+                return response.data;
+            });
+    };
+
+    return {
+        createTrip,
+        getAllTrips,
+        getTrip,
+        deleteTrip
+
+    };
+});
+
+app.factory('Places', function($http, $q) {
+
+    let getAllPlaces = function() {
+        return $http({
+            url: "http://localhost:8000/places/",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            }
+        }).then(function(response) {
+            return response.data;
+        }, function(response) {
+            console.log('error', response);
+            return $q.reject(response);
+        });
+    };
+
+    return {
+        getAllPlaces
+    };
+});
+
 
 app.factory('Fuel', function($http, $q) {
 
@@ -317,84 +396,5 @@ app.factory('Maps', function($http, $q, distCreds) {
     return {
         getStates,
         getDistance
-    };
-});
-
-app.factory('Trips', function($http, fbCreds, $q) {
-
-    let createTrip = function(newTrip) {
-        console.log('createTrip(newTrip)', newTrip);
-        return $http.post(`${fbCreds.databaseURL}/trips.json`, angular.toJson(newTrip))
-            .then(function(response) {
-                console.log('success', response.data);
-                return response.data;
-            }, function(response) {
-                console.log('error', response.data);
-                return $q.reject(response.data);
-            });
-    };
-
-    let getAllTrips = function() {
-        return $http.get(`${fbCreds.databaseURL}/trips.json`)
-            .then(function(response) {
-                console.log('success', response.data);
-                return response.data;
-            }, function(response) {
-                console.log('error', response.data);
-                return $q.reject(response.data);
-            });
-    };
-
-    let getTrip = function(tripId) {
-        return $http.get(`${fbCreds.databaseURL}/trips/${tripId}.json`)
-            .then(function(response) {
-                console.log('success', response.data);
-                return response.data;
-            }, function(response) {
-                console.log('error', response.data);
-                return $q.reject(response.data);
-            });
-    };
-
-    let deleteTrip = function(trip) {
-        console.log('trip', trip);
-        return $http.delete(`${fbCreds.databaseURL}/trips/${trip}.json`)
-            .then(function(response) {
-                console.log('success', response.data);
-                getAllTrips();
-                return response.data;
-            }, function(response) {
-                console.log('error', response.data);
-                return response.data;
-            });
-    };
-
-    return {
-        createTrip,
-        getAllTrips,
-        getTrip,
-        deleteTrip
-
-    };
-});
-
-app.factory('Places', function($http, $q) {
-
-    let getAllPlaces = function() {
-        return $http({
-            url: "http://localhost:8000/attractions/",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-            }
-        }).then(function(response) {
-            return response.data;
-        }, function(response) {
-            console.log('error', response);
-            return $q.reject(response);
-        });
-    };
-
-    return {
-        getAllPlaces
     };
 });

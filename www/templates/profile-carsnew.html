@@ -9,14 +9,14 @@
     <ion-content class="padding has-header">
         <small>Nickname</small>
         <label class="item item-input">
-            <input type="text" placeholder="e.g. Tardis, Batmobile" ng-model="carNew.nickname">
+            <input type="text" placeholder="e.g. Tardis, Batmobile" ng-model="carNew.nickname" required>
         </label>
         <div class="list">
             <label class="item item-input item-select">
                 <div class="input-label">
                     Make
                 </div>
-                <select ng-model="carNew.make" ng-change="makeSelected(carNew)">
+                <select ng-model="carNew.make" ng-change="makeSelected(carNew)" required>
                     <option ng-repeat="make in makes" class="make" value="{{make.name}}">
                         {{make.name}}
                     </option>
@@ -26,7 +26,7 @@
                 <div class="input-label">
                     Make
                 </div>
-                <select ng-model="carNew.model" name="selectModel" ng-change="modelSelected(carNew)">
+                <select ng-model="carNew.model" name="selectModel" ng-change="modelSelected(carNew)" required>
                     <option ng-repeat="model in models" class="model" value="{{model.name}}">
                         {{model.name}}
                     </option>
@@ -36,15 +36,15 @@
                 <div class="input-label">
                     Year
                 </div>
-                <select ng-model="carNew.year" name="selectYear" ng-change="yearSelected(carNew)">
+                <select ng-model="carNew.year" name="selectYear" ng-change="yearSelected(carNew)" required>
                     <option ng-repeat="year in years" class="year" value="{{year.year}}">{{year.year}}</option>
                 </select>
             </label>
         </div>
         <small>Fuel type</small>
-        <ion-list ng-model="carNew.fuel">
-            <ion-radio ng-repeat="fuelType in fuelTypes" ng-model="carNew.fuel" ng-value="'{{fuelType.strType}}'"><small>{{fuelType.strType}}</small></ion-radio>
+        <ion-list ng-model="carNew.fuel_grade" required>
+            <ion-radio ng-repeat="fuelType in fuelTypes" ng-model="carNew.fuel_grade" ng-value="'{{fuelType.strType}}'"><small>{{fuelType.strType}}</small></ion-radio>
         </ion-list>
-        <button class="button" ng-click="getMPG(carNew)">Save</button>
+        <button class="button" ng-click="setMPG(carNew)">Save</button>
     </ion-content>
 </ion-view>
