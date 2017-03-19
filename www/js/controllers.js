@@ -104,8 +104,6 @@ app.controller('GuidesCtrl', function($scope) {
 
 app.controller('ProfileCtrl', function($scope, $state, Root, Trips, Fuel) {
 
-
-
     $scope.myTrips = function() {
         console.log('clicked myTrips');
         $state.go('tab.profile');
@@ -134,7 +132,7 @@ app.controller('NewCarCtrl', function($scope, Fuel, Cars, Root) {
         model: '',
         year: '',
         fuel: '',
-        mpg: 0
+        mpg:
     };
 
     Cars.getAllMakes()
@@ -206,8 +204,7 @@ app.controller('NewCarCtrl', function($scope, Fuel, Cars, Root) {
                 //     console.log('response', response);
                 // });
             });
-
-    };
+     };
 
 });
 
