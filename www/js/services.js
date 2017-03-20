@@ -82,22 +82,19 @@ app.factory('Cars', function(Root, $http, $q, fbCreds) {
             });
     };
 
-    let listCars = function() {
-        Root.getApiRoot()
-            .then((root) => {
-                return $http({
-                    url: `${root.cars}`,
-                    headers: {
-                        "Authorization": "Token " + Root.getToken()
-                    }
-                }).then(function(response) {
-                    console.log('success', response.data);
-                    return response.data;
-                }, function(response) {
-                    console.log('error', response);
-                    return $q.reject(response);
-                });
-            });
+    let listCars = function(url) {
+        return $http({
+            url: url,
+            headers: {
+                "Authorization": "Token " + Root.getToken()
+            }
+        }).then(function(response) {
+            console.log('success', response.data);
+            return response.data;
+        }, function(response) {
+            console.log('error', response);
+            return $q.reject(response);
+        });
     };
 
     return {

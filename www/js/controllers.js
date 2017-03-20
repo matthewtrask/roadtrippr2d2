@@ -229,7 +229,13 @@ app.controller('NewTripCtrl', function($scope, $state, Root, Trips, Maps, Cars, 
     console.log(Root.getToken());
     // Populate select options
     $scope.states = Maps.getStates();
-    Cars.listCars();
+    Root.getApiRoot()
+        .then((root) => {
+            Cars.listCars(root.cars)
+                .then((response) => {
+                    $scope.cars = response;
+                });
+        });
 
     $scope.newTrip = {
         name: '',
