@@ -1,7 +1,5 @@
 let app = angular.module('Trippr', ['ionic']);
 
-app.constant('apiUrl', "http://localhost:8000");
-
 app.run(function($ionicPlatform, fbCreds) {
     $ionicPlatform.ready(function() {
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -137,6 +135,6 @@ app.config(function($httpProvider, $stateProvider, $urlRouterProvider) {
             }
         })
 
-    $urlRouterProvider.otherwise('/tab/places');
+    $urlRouterProvider.otherwise('/login');
 
 });

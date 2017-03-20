@@ -8,7 +8,7 @@ app.factory('Root', function($http, apiUrl, $q) {
                 'Authorization': "Token " + secure_token
             }
         }).then(function(response) {
-            console.log('getApiRoot', response);
+            console.log('getApiRoot', response.data);
             return response.data;
         }, function(response) {
             console.log('error', response);
@@ -32,7 +32,7 @@ app.factory('Root', function($http, apiUrl, $q) {
 });
 
 // DEV
-app.factory('Cars', function($http, $q, fbCreds) {
+app.factory('Cars', function(Root, $http, $q, fbCreds) {
 
     let getAllMakes = function() {
         // return $http.get(`https://api.edmunds.com/api/vehicle/v2/makes?fmt=json&api_key=${edCreds.apiKey}`)
@@ -57,59 +57,79 @@ app.factory('Cars', function($http, $q, fbCreds) {
             });
     };
 
-    let saveCar = function(car) {
-        return $http({
-            url: "http://localhost:8000/cars",
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            data: {
-                "nickname": data.nickname,
-                "fuel_grade": data.fuel_grade,
-                "mpg": data.mpg
-            }
-        }).then(function(response) {
-            console.log('success', response.data);
-            return response.data;
-        }, function(response) {
-            console.log('error', response.data);
-            return $q.reject(response.data);
-        });
-
-
+    let createCar = function(nn, fg, mpg) {
+        Root.getApiRoot()
+            .then((root) => {
+                return $http({
+                    url: `${root.cars}`,
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Token " + Root.getToken()
+                    },
+                    data: {
+                        "nickname": nn,
+                        "fuel_grade": fg,
+                        "mpg": mpg
+                    }
+                }).then(function(response) {
+                    console.log('success', response);
+                    return response.data;
+                }, function(response) {
+                    console.log('error', response);
+                    return $q.reject(response);
+                });
+            });
     };
 
-    let getSavedCars = function() {
-        return $http.get(`${fbCreds.databaseURL}/cars.json`)
-            .then(function(response) {
-                console.log('success', response.data);
-                return response.data;
-            }, function(response) {
-                console.log('error', response.data);
-                return $q.reject(response.data);
+    let listCars = function() {
+        Root.getApiRoot()
+            .then((root) => {
+                return $http({
+                    url: `${root.cars}`,
+                    headers: {
+                        "Authorization": "Token " + Root.getToken()
+                    }
+                }).then(function(response) {
+                    console.log('success', response.data);
+                    return response.data;
+                }, function(response) {
+                    console.log('error', response);
+                    return $q.reject(response);
+                });
             });
     };
 
     return {
         getAllMakes,
         getCarData,
-        // saveCar,
-        // getSavedCars
+        createCar,
+        listCars
     };
 });
 
 app.factory('Trips', function($http, fbCreds, $q) {
 
-    let createTrip = function(newTrip) {
-        console.log('createTrip(newTrip)', newTrip);
-        return $http.post(`${fbCreds.databaseURL}/trips.json`, angular.toJson(newTrip))
-            .then(function(response) {
-                console.log('success', response.data);
-                return response.data;
-            }, function(response) {
-                console.log('error', response.data);
-                return $q.reject(response.data);
+    let createTrip = function(name) {
+        Root.getApiRoot()
+            .then((root) => {
+                return $http({
+                    url: `${root.trips}`,
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Token " + Root.getToken()
+                    },
+                    data: {
+                        "name": name
+                    }
+                }).then(function(response) {
+                    console.log('success', response);
+                    return response.data;
+                }, function(response) {
+                    console.log('error', response);
+                    return $q.reject(response);
+                });
             });
     };
 

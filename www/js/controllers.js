@@ -2,7 +2,7 @@
 ////// App / Nav ///////
 ///////////////////////
 
-app.controller('AppCtrl', function($scope, $state, $ionicSideMenuDelegate) {
+app.controller('AppCtrl', function($scope, $state, $ionicSideMenuDelegate, Root) {
 
     $scope.user = {};
 
@@ -14,10 +14,6 @@ app.controller('AppCtrl', function($scope, $state, $ionicSideMenuDelegate) {
         $ionicSideMenuDelegate.toggleRight();
     };
 
-    $scope.logout = function() {
-        console.log('Clicked logout...');
-    };
-
     $scope.newTripForm = function() {
         $state.go('tab.profile-tripsnew');
     };
@@ -25,6 +21,31 @@ app.controller('AppCtrl', function($scope, $state, $ionicSideMenuDelegate) {
     $scope.newCarForm = function() {
         $state.go('tab.profile-carsnew');
     };
+
+    $scope.showGuides = function(){
+        $state.go('tab.guides');
+    };
+
+    $scope.viewSavedPlaces = function(){
+        $state.go('tab.profile-places');
+    };
+
+    $scope.viewSavedTrips = function(){
+        $state.go('tab.profile-trips');
+    };
+
+    $scope.viewSavedCars = function(){
+        $state.go('tab.profile-cars');
+    };
+
+    $scope.viewSettings = function(){
+        console.log('Clicked settings...');
+    };
+
+    $scope.logout = function() {
+        console.log('Clicked logout...');
+    };
+
 });
 
 /////////////////////////
@@ -34,8 +55,6 @@ app.controller('AppCtrl', function($scope, $state, $ionicSideMenuDelegate) {
 app.controller('AuthCtrl', function($scope, Root, $state, $http) {
 
     $scope.register = function() {
-        console.log('$scope.register');
-
         return $http({
             url: "http://localhost:8000/register_user/",
             method: "POST",
@@ -51,7 +70,6 @@ app.controller('AuthCtrl', function($scope, Root, $state, $http) {
             }
         }).then((response) => {
             Root.setToken(response.data.token);
-            console.log('Root.getToken()', Root.getToken())
             if (response.data.success === true) {
                 $state.go('tab.places');
             };
@@ -68,7 +86,6 @@ app.controller('AuthCtrl', function($scope, Root, $state, $http) {
             }
         }).then((response) => {
             Root.setToken(response.data.token);
-            console.log('Root.getToken()', Root.getToken());
             if (response.data.token !== '') {
                 $state.go('tab.places');
             }
@@ -80,9 +97,9 @@ app.controller('AuthCtrl', function($scope, Root, $state, $http) {
 //////// Places ////////
 ///////////////////////
 
-app.controller('PlacesCtrl', function($scope, $state, Places) {
+app.controller('PlacesCtrl', function($scope, $state, Places, Root) {
     console.log('PlacesCtrl');
-
+    console.log(Root.getToken());
     $scope.getPlaces = Places.getAllPlaces()
         .then((response) => {
             $scope.places = response;
@@ -93,8 +110,9 @@ app.controller('PlacesCtrl', function($scope, $state, Places) {
 //////// Guides ////////
 ///////////////////////
 
-app.controller('GuidesCtrl', function($scope) {
+app.controller('GuidesCtrl', function($scope, Root) {
     console.log('GuidesCtrl');
+    console.log(Root.getToken());
 });
 
 /////////////////////////
@@ -102,6 +120,8 @@ app.controller('GuidesCtrl', function($scope) {
 ///////////////////////
 
 app.controller('ProfileCtrl', function($scope, $state, Root, Trips, Fuel) {
+    console.log('ProfileCtrl');
+    console.log(Root.getToken());
 
     $scope.myTrips = function() {
         console.log('clicked myTrips');
@@ -117,15 +137,14 @@ app.controller('ProfileCtrl', function($scope, $state, Root, Trips, Fuel) {
         console.log('clicked myPlaces');
         $state.go('tab.profile-places');
     };
-    // $scope.settings = {
-    //   enableFriends: true
-    // };
 });
 
 ////// Cars //////
 
 app.controller('NewCarCtrl', function($scope, Fuel, Cars, Root, $http) {
-    // Populate form options
+    console.log('NewCarCtrl');
+    console.log(Root.getToken());
+    // Populate select options
     Cars.getAllMakes()
         .then((response) => {
             $scope.makes = response;
@@ -164,7 +183,7 @@ app.controller('NewCarCtrl', function($scope, Fuel, Cars, Root, $http) {
         owner: ''
     };
 
-    // Build newCar object from user input
+    // Build newCar from user input
     $scope.makeSelected = function(newCar) {
         $scope.makes.forEach((make) => {
             if (make.name == newCar.make) {
@@ -180,7 +199,7 @@ app.controller('NewCarCtrl', function($scope, Fuel, Cars, Root, $http) {
         });
     };
     $scope.setMPG = function(newCar) {
-      // Called from user click [Save]
+        // Called from user click [Save]
         Cars.getCarData(newCar.make, newCar.model, newCar.year)
             .then((response) => {
                 newCar.mpg = Math.round((parseInt(response.MPG.city) + parseInt(response.MPG.highway)) / 2);
@@ -188,43 +207,29 @@ app.controller('NewCarCtrl', function($scope, Fuel, Cars, Root, $http) {
             });
     };
 
-// >>>>>>>>>>>
-    $scope.setOwner = function(newCar){
-      newCar.owner = Root.getToken();
-      console.log('newCar', newCar);
-      // $scope.car = newCar;
-      // $scope.createCar();
+    $scope.setOwner = function(newCar) {
+        newCar.owner = Root.getToken();
+        $scope.saveCar(newCar);
     };
 
-    $scope.createCar = function(){
+    $scope.saveCar = function(car) {
+        Cars.createCar(car.nickname, car.fuel_grade, car.mpg);
+    };
+});
 
-      Root.getApiRoot()
-          .then((root) => {
-              $http({
-                  url: `${root.cars}`, // method
-                  method: 'POST',
-                  headers: {
-                      'Authorization': 'Token ' + Root.getToken()
-                  },
-                  data: {
-                    "nickname": $scope.car.nickname,
-                    "owner": $scope.car.owner,
-                    "fuel_grade": $scope.car.fuel_grade,
-                    "mpg": $scope.car.mpg
-                  }
-              }).then((response) => {
-                  console.log('response', response);
-              });
-          });
-    }
+app.controller('CarsCtrl', function($scope, Root){
+    console.log('CarsCtrl');
+    console.log(Root.getToken());
 });
 
 ////// Trips //////
 
-app.controller('NewTripCtrl', function($scope, Trips, Maps, $state, $ionicHistory, $ionicTabsDelegate) {
+app.controller('NewTripCtrl', function($scope, $state, Root, Trips, Maps, Cars, $ionicHistory, $ionicTabsDelegate) {
     console.log('NewTripCtrl');
-
+    console.log(Root.getToken());
+    // Populate select options
     $scope.states = Maps.getStates();
+    Cars.listCars();
 
     $scope.newTrip = {
         name: '',
@@ -237,15 +242,23 @@ app.controller('NewTripCtrl', function($scope, Trips, Maps, $state, $ionicHistor
             state: ''
         },
         depart: '',
-        carId: '',
-        plannerId: ''
+        car: '',
+        owner: ''
     };
+
+
 });
+
+
+
+
+
+
+
 
 /////////////////////////
 //////// Drives ////////
 ///////////////////////
-
 app.controller('DriveCtrl', function($scope) {
     console.log('DriveCtrl');
 
@@ -256,7 +269,7 @@ app.controller('DriveCtrl', function($scope) {
                 newTrip.distance = parseInt(data.replace(/,/g, ""));
                 Trips.createTrip(newTrip)
                     .then(function(response) {
-                      console.log('response', response);
+                        console.log('response', response);
                     })
             });
     });

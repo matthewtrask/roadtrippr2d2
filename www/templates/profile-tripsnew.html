@@ -11,7 +11,7 @@
         <label class="item item-input">
             <input type="text" placeholder="e.g. West Coast, Northeast, etc." ng-model="newTrip.name">
         </label>
-        <small>Origin</small>
+        <small>From</small>
         <label class="item item-input">
             <span class="input-label">City</span>
             <input type="text" ng-model="newTrip.start.city">
@@ -24,7 +24,7 @@
                 <option ng-repeat="state in states">{{state.name}}</option>
             </select>
         </label>
-        <small>Destination</small>
+        <small>To</small>
         <label class="item item-input">
             <span class="input-label">City</span>
             <input type="text">
@@ -42,12 +42,13 @@
             <span class="input-label">Date</span>
             <input type="date" ng-model="newTrip.depart">
         </label>
+        <small>Transportation</small>
         <div class="list">
             <label class="item item-input item-select">
                 <div class="input-label">
                     Choose a car
                 </div>
-                <select ng-model="newTrip.carId" name="selectCar">
+                <select ng-model="newTrip.car">
                     <option ng-repeat="car in cars">
                         {{car.nickname}}
                     </option>
