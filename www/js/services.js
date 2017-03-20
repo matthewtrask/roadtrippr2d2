@@ -86,6 +86,7 @@ app.factory('Cars', function(Root, $http, $q, fbCreds) {
         return $http({
             url: url,
             headers: {
+                "Content-Type": "application/json",
                 "Authorization": "Token " + Root.getToken()
             }
         }).then(function(response) {
@@ -105,11 +106,12 @@ app.factory('Cars', function(Root, $http, $q, fbCreds) {
     };
 });
 
-app.factory('Trips', function($http, fbCreds, $q) {
+app.factory('Trips', function(Root, $http, $q) {
 
-    let createTrip = function(name) {
+    let createTrip = function(name, car) {
         Root.getApiRoot()
             .then((root) => {
+                console.log('root', root);
                 return $http({
                     url: `${root.trips}`,
                     method: 'POST',
@@ -118,10 +120,11 @@ app.factory('Trips', function($http, fbCreds, $q) {
                         "Authorization": "Token " + Root.getToken()
                     },
                     data: {
-                        "name": name
+                        "name": name,
+                        "car": car
                     }
                 }).then(function(response) {
-                    console.log('success', response);
+                    console.log('success', response.data);
                     return response.data;
                 }, function(response) {
                     console.log('error', response);
@@ -130,46 +133,8 @@ app.factory('Trips', function($http, fbCreds, $q) {
             });
     };
 
-    let getAllTrips = function() {
-        return $http.get(`${fbCreds.databaseURL}/trips.json`)
-            .then(function(response) {
-                console.log('success', response.data);
-                return response.data;
-            }, function(response) {
-                console.log('error', response.data);
-                return $q.reject(response.data);
-            });
-    };
-
-    let getTrip = function(tripId) {
-        return $http.get(`${fbCreds.databaseURL}/trips/${tripId}.json`)
-            .then(function(response) {
-                console.log('success', response.data);
-                return response.data;
-            }, function(response) {
-                console.log('error', response.data);
-                return $q.reject(response.data);
-            });
-    };
-
-    let deleteTrip = function(trip) {
-        console.log('trip', trip);
-        return $http.delete(`${fbCreds.databaseURL}/trips/${trip}.json`)
-            .then(function(response) {
-                console.log('success', response.data);
-                getAllTrips();
-                return response.data;
-            }, function(response) {
-                console.log('error', response.data);
-                return response.data;
-            });
-    };
-
     return {
-        createTrip,
-        getAllTrips,
-        getTrip,
-        deleteTrip
+        createTrip
 
     };
 });

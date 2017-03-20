@@ -247,11 +247,15 @@ app.controller('NewTripCtrl', function($scope, $state, Root, Trips, Maps, Cars, 
             city: '',
             state: ''
         },
-        depart: '',
         car: '',
         owner: ''
     };
 
+    $scope.startTrip = function(trip){
+        console.log('clicked START TRIP');
+        console.log('trip', trip);
+        Trips.createTrip(trip.name, parseInt(trip.car));
+    };
 
 });
 

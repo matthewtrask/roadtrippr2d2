@@ -21,7 +21,7 @@
                 &nbsp;
             </div>
             <select ng-model="newTrip.start.state">
-                <option ng-repeat="state in states">{{state.name}}</option>
+                <option ng-repeat="state in states" value={{state.abbreviation}}>{{state.name}}</option>
             </select>
         </label>
         <small>To</small>
@@ -34,13 +34,8 @@
                 &nbsp;
             </div>
             <select ng-model="newTrip.end.state">
-                <option ng-repeat="state in states">{{state.name}}</option>
+                <option ng-repeat="state in states" value={{state.abbreviation}}>{{state.name}}</option>
             </select>
-        </label>
-        <small>Departure</small>
-        <label class="item item-input">
-            <span class="input-label">Date</span>
-            <input type="date" ng-model="newTrip.depart">
         </label>
         <small>Transportation</small>
         <div class="list">
@@ -49,17 +44,17 @@
                     Choose a car
                 </div>
                 <select ng-model="newTrip.car">
-                    <option ng-repeat="car in cars">
+                    <option ng-repeat="car in cars" value={{car.id}}>
                         {{car.nickname}}
                     </option>
                 </select>
             </label>
         </div>
-        <a href="" ng-click="newCarForm()">Or add a new car</a>
+        <a href="" ng-click="newCarForm()">Add a new car</a>
     </ion-content>
     <ion-footer-bar align-title="left" class="">
 
-      <button class="button button-block button-positive">
+      <button class="button button-block button-positive" ng-click="startTrip(newTrip)">
         START TRIP
       </button>
     </ion-footer-bar>
