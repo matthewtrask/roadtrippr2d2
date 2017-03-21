@@ -22,23 +22,23 @@ app.controller('AppCtrl', function($scope, $state, $ionicSideMenuDelegate, Root)
         $state.go('tab.profile-carsnew');
     };
 
-    $scope.showGuides = function(){
+    $scope.showGuides = function() {
         $state.go('tab.guides');
     };
 
-    $scope.viewSavedPlaces = function(){
+    $scope.viewSavedPlaces = function() {
         $state.go('tab.profile-places');
     };
 
-    $scope.viewSavedTrips = function(){
+    $scope.viewSavedTrips = function() {
         $state.go('tab.profile-trips');
     };
 
-    $scope.viewSavedCars = function(){
+    $scope.viewSavedCars = function() {
         $state.go('tab.profile-cars');
     };
 
-    $scope.viewSettings = function(){
+    $scope.viewSettings = function() {
         console.log('Clicked settings...');
     };
 
@@ -81,8 +81,10 @@ app.controller('AuthCtrl', function($scope, Root, $state, $http) {
             url: "http://localhost:8000/api-token-auth/",
             method: "POST",
             data: {
-                "username": $scope.user.username,
-                "password": $scope.user.password
+                // "username": $scope.user.username,
+                // "password": $scope.user.password
+                "username": "John1234",
+                "password": "Pass1234"
             }
         }).then((response) => {
             Root.setToken(response.data.token);
@@ -99,12 +101,55 @@ app.controller('AuthCtrl', function($scope, Root, $state, $http) {
 
 app.controller('PlacesCtrl', function($scope, $state, Places, Root) {
     console.log('PlacesCtrl');
-    console.log(Root.getToken());
-    $scope.getPlaces = Places.getAllPlaces()
+    $scope.getPlaces = Places.listPlaces()
         .then((response) => {
             $scope.places = response;
         });
 });
+
+/////////////////////////
+////////// Map /////////
+///////////////////////
+
+app.controller('MapCtrl', function($scope, $state, $cordovaGeolocation) {
+    console.log('MapCtrl');
+
+    var options = {timeout: 10000, enableHighAccuracy: true};
+      $cordovaGeolocation.getCurrentPosition(options)
+
+    // navigator.geolocation.getCurrentPosition(options)
+        .then(function(position){
+            console.log('position', position);
+
+      var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+      console.log(latLng);
+      var mapOptions = {
+        center: latLng,
+        zoom: 15,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      };
+
+      console.log("document.getElementById(", document.getElementById("map"))
+
+      $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
+      console.log($scope.map);
+    }, function(error){
+      console.log("Could not get location");
+    });
+///////
+
+
+
+
+
+    // function initialize() {
+        // navigator.geolocation.getCurrentPosition(geolocationSuccess);
+    // }
+
+    // ionic.Platform.ready(initialize);
+
+});
+
 
 /////////////////////////
 //////// Guides ////////
@@ -112,7 +157,7 @@ app.controller('PlacesCtrl', function($scope, $state, Places, Root) {
 
 app.controller('GuidesCtrl', function($scope, Root) {
     console.log('GuidesCtrl');
-    console.log(Root.getToken());
+
 });
 
 /////////////////////////
@@ -121,7 +166,7 @@ app.controller('GuidesCtrl', function($scope, Root) {
 
 app.controller('ProfileCtrl', function($scope, $state, Root, Trips, Fuel) {
     console.log('ProfileCtrl');
-    console.log(Root.getToken());
+
 
     $scope.myTrips = function() {
         console.log('clicked myTrips');
@@ -143,7 +188,7 @@ app.controller('ProfileCtrl', function($scope, $state, Root, Trips, Fuel) {
 
 app.controller('NewCarCtrl', function($scope, Fuel, Cars, Root, $http) {
     console.log('NewCarCtrl');
-    console.log(Root.getToken());
+
     // Populate select options
     Cars.getAllMakes()
         .then((response) => {
@@ -217,16 +262,10 @@ app.controller('NewCarCtrl', function($scope, Fuel, Cars, Root, $http) {
     };
 });
 
-app.controller('CarsCtrl', function($scope, Root){
-    console.log('CarsCtrl');
-    console.log(Root.getToken());
-});
-
 ////// Trips //////
 
-app.controller('NewTripCtrl', function($scope, $state, Root, Trips, Maps, Cars, $ionicHistory, $ionicTabsDelegate) {
+app.controller('NewTripCtrl', function($scope, $state, Root, Trips, Maps, Cars, Places, $ionicHistory, $ionicTabsDelegate) {
     console.log('NewTripCtrl');
-    console.log(Root.getToken());
     // Populate select options
     $scope.states = Maps.getStates();
     Root.getApiRoot()
@@ -238,49 +277,52 @@ app.controller('NewTripCtrl', function($scope, $state, Root, Trips, Maps, Cars, 
         });
 
     $scope.newTrip = {
-        name: '',
+        name: 'Trip with stops',
         start: {
-            city: '',
-            state: ''
+            city: 'St.Louis',
+            state: 'MO'
         },
         end: {
-            city: '',
-            state: ''
+            city: 'Providence',
+            state: 'RI'
         },
         car: '',
-        owner: ''
+        owner: '',
+        distance: '',
+        duration: '',
+        id: null
     };
 
-    $scope.startTrip = function(trip){
-        console.log('clicked START TRIP');
-        console.log('trip', trip);
-        Trips.createTrip(trip.name, parseInt(trip.car));
-    };
-
-});
-
-
-
-
-
-
-
-
-/////////////////////////
-//////// Drives ////////
-///////////////////////
-app.controller('DriveCtrl', function($scope) {
-    console.log('DriveCtrl');
-
-    $scope.getDistance = ((newTrip) => {
-        Maps.getDistance(newTrip)
-            .then(function(data) {
-                newTrip.distStr = data;
-                newTrip.distance = parseInt(data.replace(/,/g, ""));
-                Trips.createTrip(newTrip)
-                    .then(function(response) {
-                        console.log('response', response);
-                    })
+    $scope.startTrip = function(trip) {
+        // Instantiate trip, store user and car on trip
+        Root.getApiRoot()
+            .then((root) => {
+                Trips.createTrip(root, trip.name, parseInt(trip.car))
+                    .then((response) => {
+                        $scope.newTrip.id = response.id;
+                        $scope.showDistanceDuration();
+                    });
             });
-    });
+    };
+
+    $scope.showDistanceDuration = function() {
+        Maps.getDistanceDuration($scope.newTrip)
+            .then((response) => {
+                $scope.newTrip.distance = response.distance.text;
+                $scope.newTrip.duration = response.duration.text;
+                $scope.endPoint($scope.newTrip.start);
+                $scope.endPoint($scope.newTrip.end);
+            });
+    };
+
+    $scope.endPoint = function(place) {
+        Root.getApiRoot()
+            .then((root) => {
+                Places.createPlace(root, place)
+                    .then((response) => {
+                        Trips.endPoint(root, $scope.newTrip.id, response.id);
+                    });
+            });
+    };
+
 });

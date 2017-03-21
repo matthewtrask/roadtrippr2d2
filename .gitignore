@@ -9,6 +9,7 @@ bower_components
 platforms/
 plugins/
 www/values/
-www/node_modules/
+www/lib/node_modules/
 www/js/dev.json
 www/js/dev2.json
+www/lib/www/
