@@ -1,6 +1,6 @@
-let app = angular.module('Trippr', ['ionic']);
+let app = angular.module('Trippr', ['ionic', 'ngCordova']);
 
-app.run(function($ionicPlatform, fbCreds) {
+app.run(function($ionicPlatform) {
     $ionicPlatform.ready(function() {
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
         // for form inputs)
@@ -15,13 +15,6 @@ app.run(function($ionicPlatform, fbCreds) {
         }
     });
 
-    // Firebase for Chats
-    let fb = fbCreds;
-    let authConfig = {
-        apiKey: fb.apiKey,
-        authDomain: fb.authDomain
-    };
-    firebase.initializeApp(authConfig);
 });
 
 app.config(function($httpProvider, $stateProvider, $urlRouterProvider) {
@@ -30,6 +23,13 @@ app.config(function($httpProvider, $stateProvider, $urlRouterProvider) {
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 
     $stateProvider
+
+        //dev/temporary - will be ng-include in places and map tabs
+        .state('map', {
+          url: '/devmap',
+          templateUrl: 'templates/map.html',
+          controller: 'MapCtrl'
+        })
 
         .state('register', {
             url: '/register',
@@ -65,7 +65,7 @@ app.config(function($httpProvider, $stateProvider, $urlRouterProvider) {
             views: {
               'tab-map': {
                 templateUrl: 'templates/tab-map.html',
-                controller: 'AppCtrl'
+                controller: 'MapCtrl'
               }
             }
         })

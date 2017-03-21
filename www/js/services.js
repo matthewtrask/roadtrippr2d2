@@ -1,4 +1,4 @@
-app.factory('Root', function($http, apiUrl, $q) {
+app.factory('Root', function(apiUrl, $http, $q) {
     let secure_token = null;
 
     let getApiRoot = function() {
@@ -8,10 +8,9 @@ app.factory('Root', function($http, apiUrl, $q) {
                 'Authorization': "Token " + secure_token
             }
         }).then(function(response) {
-            console.log('getApiRoot', response.data);
+            // console.log('getApiRoot', response.data);
             return response.data;
         }, function(response) {
-            console.log('error', response);
             return $q.reject(response);
         });
     };
@@ -31,17 +30,14 @@ app.factory('Root', function($http, apiUrl, $q) {
     };
 });
 
-// DEV
-app.factory('Cars', function(Root, $http, $q, fbCreds) {
-
+app.factory('Cars', function(Root, $http, $q) {
+    // JSON for DEV
     let getAllMakes = function() {
         // return $http.get(`https://api.edmunds.com/api/vehicle/v2/makes?fmt=json&api_key=${edCreds.apiKey}`)
         return $http.get('/js/dev.json')
             .then(function(response) {
-                // console.log('success', response.data);
                 return response.data['makes'];
             }, function(response) {
-                console.log('error', response.data);
                 return $q.reject(response.data);
             });
     };
@@ -52,7 +48,6 @@ app.factory('Cars', function(Root, $http, $q, fbCreds) {
             .then(function(response) {
                 return response.data.styles[0];
             }, function(response) {
-                console.log('error', response.data);
                 return $q.reject(response.data);
             });
     };
@@ -73,10 +68,8 @@ app.factory('Cars', function(Root, $http, $q, fbCreds) {
                         "mpg": mpg
                     }
                 }).then(function(response) {
-                    console.log('success', response);
                     return response.data;
                 }, function(response) {
-                    console.log('error', response);
                     return $q.reject(response);
                 });
             });
@@ -90,10 +83,8 @@ app.factory('Cars', function(Root, $http, $q, fbCreds) {
                 "Authorization": "Token " + Root.getToken()
             }
         }).then(function(response) {
-            console.log('success', response.data);
             return response.data;
         }, function(response) {
-            console.log('error', response);
             return $q.reject(response);
         });
     };
@@ -108,68 +99,112 @@ app.factory('Cars', function(Root, $http, $q, fbCreds) {
 
 app.factory('Trips', function(Root, $http, $q) {
 
-    let createTrip = function(name, car) {
-        Root.getApiRoot()
-            .then((root) => {
-                console.log('root', root);
-                return $http({
-                    url: `${root.trips}`,
-                    method: 'POST',
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": "Token " + Root.getToken()
-                    },
-                    data: {
-                        "name": name,
-                        "car": car
-                    }
-                }).then(function(response) {
-                    console.log('success', response.data);
-                    return response.data;
-                }, function(response) {
-                    console.log('error', response);
-                    return $q.reject(response);
-                });
-            });
-    };
-
-    return {
-        createTrip
-
-    };
-});
-
-app.factory('Places', function($http, $q) {
-
-    let getAllPlaces = function() {
+    let createTrip = function(root, name, car) {
         return $http({
-            url: "http://localhost:8000/places/",
+            url: `${root.trips}`,
+            method: 'POST',
             headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
+                "Content-Type": "application/json",
+                "Authorization": "Token " + Root.getToken()
+            },
+            data: {
+                "name": name,
+                "car": car
             }
         }).then(function(response) {
             return response.data;
         }, function(response) {
-            console.log('error', response);
+            return $q.reject(response);
+        });
+    };
+
+    let endPoint = function(root, trip, stop){
+        return $http({
+            url: `${root.stops}`,
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Token " + Root.getToken()
+            },
+            data: {
+                "trip": trip,
+                "stop": stop
+            }
+        }).then(function(response){
+            return response.data
+        }, function(response){
             return $q.reject(response);
         });
     };
 
     return {
-        getAllPlaces
+        createTrip,
+        endPoint
     };
 });
 
+app.factory('Places', function(Root, $http, $q) {
+
+    let listPlaces = function() {
+        return $http({
+            url: "http://localhost:8000/places/",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(function(response) {
+            return response.data;
+        }, function(response) {
+            return $q.reject(response);
+        });
+    };
+
+    let retrievePlace = function(root, placeId) {
+        return $http({
+            url: `${root.places}${placeId}/`,
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(function(response) {
+            return response.data
+        }, function(response) {
+            return $q.reject(response);
+        });
+    };
+
+    let createPlace = function(root, data) {
+        return $http({
+            url: `${root.places}`,
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Token " + Root.getToken()
+            },
+            data: {
+                "name": data.name || '',
+                "city": data.city,
+                "state": data.state
+            }
+        }).then(function(response) {
+            return response.data;
+        }, function(response) {
+            return $q.reject(response);
+        });
+    };
+
+    return {
+        listPlaces,
+        createPlace,
+        retrievePlace
+    };
+});
 
 app.factory('Fuel', function($http, $q) {
 
     let getGasPrices = function() {
         return $http.get(`http://www.fueleconomy.gov/ws/rest/fuelprices`)
             .then(function(response) {
-                // console.log('success!', response.data);
                 return response.data;
             }, function(response) {
-                console.log('error', response.data);
                 return $q.reject(response.data);
             });
     };
@@ -180,6 +215,28 @@ app.factory('Fuel', function($http, $q) {
 });
 
 app.factory('Maps', function($http, $q, distCreds) {
+
+    let getStates = function() {
+        return states;
+    };
+
+    let getDistanceDuration = function(newTrip) {
+        return $http({
+            url: `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${newTrip.start.city}+${newTrip.start.state}&destinations=${newTrip.end.city}+${newTrip.end.state}&units=imperial&key=${distCreds.apiKey}`
+        }).then(function(response) {
+            return response.data.rows[0].elements[0];
+        }, function(response) {
+            return $q.reject(response.data);
+        });
+    };
+
+    let getCurrent = function() {
+        console.log('Maps.getCurrent');
+    };
+
+    let geoCode = function() {
+        console.log('Maps.geoCode');
+    };
 
     let states = [{
         name: "Alabama",
@@ -360,23 +417,10 @@ app.factory('Maps', function($http, $q, distCreds) {
         abbreviation: "WY"
     }];
 
-    let getStates = function() {
-        return states;
-    };
-
-    let getDistance = function(newTrip) {
-        return $http.get(`https://maps.googleapis.com/maps/api/distancematrix/json?origins=${newTrip.start.city}+${newTrip.start.state}&destinations=${newTrip.end.city}+${newTrip.end.state}&units=imperial&key=${distCreds.apiKey}`)
-            .then(function(response) {
-                // console.log('success', response.data.rows[0].elements[0].distance.text);
-                return response.data.rows[0].elements[0].distance.text;
-            }, function(response) {
-                console.log('error', response);
-                return $q.reject(response);
-            });
-    };
-
     return {
         getStates,
-        getDistance
+        getDistanceDuration,
+        getCurrent,
+        geoCode
     };
 });
